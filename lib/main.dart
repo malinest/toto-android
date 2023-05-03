@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Toto Demo',
       theme: ThemeData(
         primarySwatch: Colors.brown,
+        fontFamily: 'NotoSans'
       ),
       home: const MyHomePage(),
     );
@@ -33,11 +35,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+         mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Center(
-              child: Title(
-                color: Colors.black,
-                child: Text('Toto', style: TextStyle(fontSize: 50),),
+            Title(
+              color: Colors.black,
+              child: Text(
+                'Boards',
+                style: TextStyle(fontSize: 50),
+                textAlign: TextAlign.left,
               ),
             ),
             Center(
@@ -65,12 +70,21 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                '[+] New Board',
-                                style: TextStyle(
-                                  color: Colors.white,
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const SecondRoute()));
+                                },
+                                child: Text(
+                                  '[+] New Board',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.left,
                                 ),
-                                textAlign: TextAlign.left,
                               ),
                             ),
                           ],
@@ -85,15 +99,12 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Card(
                 color: Color(0xfffff3dd),
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                    color: Color(0xFF9e9583),
-                  ),
-                  borderRadius: BorderRadius.circular(10)
-                ),
+                    side: BorderSide(
+                      color: Color(0xFF9e9583),
+                    ),
+                    borderRadius: BorderRadius.circular(5)),
                 child: GridView.count(
                   primary: false,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
                   crossAxisCount: 4,
                   shrinkWrap: true,
                   childAspectRatio: 3,
@@ -113,6 +124,23 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class SecondRoute extends StatelessWidget {
+  const SecondRoute({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("New Board")),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {},
+          child: Text("Create Board"),
         ),
       ),
     );
