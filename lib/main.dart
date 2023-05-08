@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:toto_android/Album.dart';
+import 'package:toto_android/api.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,12 +31,40 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late Future <Album> futureAlbum;
+
+  @override
+  void initState() {
+    super.initState();
+    futureAlbum = fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+      title: 'Fetch Data Example',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Fetch Data Example'),
+        ),
+      body: Center(
+        child: FutureBuilder<Album>(
+          future: futureAlbum,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(snapshot.data!.title);
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return CircularProgressIndicator();
+          },
+        ),
+      ),
+      ),
+    );
+    /*Scaffold(
       body: SafeArea(
         child: Column(
-         mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Title(
               color: Colors.black,
@@ -126,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-    );
+    );*/
   }
 }
 
