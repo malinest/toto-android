@@ -44,4 +44,26 @@ class TotoTextStyles {
             fontWeight: FontWeight.w600,
             color: Colors.white,
           );
+
+  static TextStyle? displayMedium(BuildContext context) =>
+      Theme.of(context).textTheme.displayMedium?.copyWith(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          );
+
+  static TextStyle? labelMedium(BuildContext context) =>
+      Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: 12.0,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey,
+          );
+
+  static TextStyle? labelSmall(BuildContext context) =>
+      Theme.of(context).textTheme.labelSmall?.copyWith(
+            fontSize: 10.0,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey,
+            letterSpacing: .5,
+          );
 }
