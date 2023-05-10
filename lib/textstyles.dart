@@ -24,8 +24,8 @@ class TotoTextStyles {
             color: TotoColors.textColor,
           );
 
-  static TextStyle? titleSmall(BuildContext context) =>
-      Theme.of(context).textTheme.titleSmall?.copyWith(
+  static TextStyle? displaySmall(BuildContext context) =>
+      Theme.of(context).textTheme.displaySmall?.copyWith(
             fontSize: 14.0,
             fontWeight: FontWeight.w600,
             color: TotoColors.contrastColor,
@@ -57,6 +57,12 @@ class TotoTextStyles {
             fontSize: 12.0,
             fontWeight: FontWeight.w600,
             color: Colors.grey,
+          );
+
+  static TextStyle? titleSmall(BuildContext context) =>
+      Theme.of(context).textTheme.titleSmall?.copyWith(
+            fontSize: 18.0,
+            color: Colors.black,
           );
 
   static TextStyle? labelSmall(BuildContext context) =>
