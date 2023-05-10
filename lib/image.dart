@@ -36,6 +36,7 @@ class _ImagePageState extends State<ImagePage> {
                 child: Image.network(
                   widget.url,
                   fit: BoxFit.cover,
+                  height: double.infinity,
                   width: double.infinity,
                   alignment: Alignment.center,
                 ),
