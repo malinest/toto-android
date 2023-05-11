@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toto_android/boardview.dart';
 import 'package:toto_android/colors.dart';
+import 'api/post.dart';
 import 'image.dart';
 import 'postview.dart';
 import 'textstyles.dart';
@@ -65,7 +66,7 @@ class TotoUtils {
   }
 
   static
-  Card buildPost(BuildContext context) {
+  Card buildPost(BuildContext context, Post post) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
@@ -75,7 +76,10 @@ class TotoUtils {
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PostViewPage(),
+            builder: (context) => PostViewPage(
+              post:
+                post
+            ),
           ),
         ),
         child: Padding(
@@ -86,17 +90,19 @@ class TotoUtils {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Title(
-                      color: TotoColors.textColor,
-                      child: Text(
-                        'Has Elon Musk gone too far?',
-                        style: TotoTextStyles.displayMedium(context),
+                    Expanded(
+                      child: Title(
+                        color: TotoColors.textColor,
+                        child: Text(
+                          post.title,
+                          style: TotoTextStyles.displayMedium(context),
+                        ),
                       ),
                     ),
                     Title(
                       color: TotoColors.textColor,
                       child: Text(
-                        'JordiSoto',
+                        post.username,
                         style: TotoTextStyles.labelMedium(context),
                       ),
                     ),
@@ -108,7 +114,7 @@ class TotoUtils {
                     Title(
                       color: TotoColors.textColor,
                       child: Text(
-                        'No.4 23-05-2023 6:39 juanymedio.jpg',
+                        'No.${post.id} ${post.date} ${post.filename}',
                         style: TotoTextStyles.labelSmall(context),
                       ),
                     ),
@@ -137,10 +143,17 @@ class TotoUtils {
                     ),
                   ),
                 ),
-                const Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque. Duis vulputate commodo lectus, ac blandit elit tincidunt id. Sed rhoncus, tortor sed a sidsssi',
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
+                SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      post.content,
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
                 )
               ],
             ),

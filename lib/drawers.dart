@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toto_android/boardview.dart';
 import 'package:toto_android/signup.dart';
 import 'package:toto_android/textstyles.dart';
 
@@ -11,7 +12,7 @@ class TotoDrawers {
           padding: EdgeInsets.zero,
           children: [
             drawerHeader(Icons.person, 'John Doe', context),
-            listTile('Home', Icons.home, context, const LoginPage()),
+            listTile('Home', Icons.home, context, const BoardPage()),
             listTile('Search', Icons.search, context, const SignUpPage()),
             expansionTile('Following', Icons.bookmarks, context),
             listTile('My Boards', Icons.burst_mode, context, const LoginPage()),

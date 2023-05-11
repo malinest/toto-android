@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:toto_android/colors.dart';
-import 'package:toto_android/drawers.dart';
-import 'package:toto_android/postform.dart';
-import 'package:toto_android/textstyles.dart';
-import 'package:toto_android/utils.dart';
+import 'package:toto_android/api/post.dart';
+import 'colors.dart';
+import 'drawers.dart';
+import 'postform.dart';
+import 'textstyles.dart';
+import 'utils.dart';
+import 'api/api.dart';
 
 class BoardPage extends StatefulWidget {
   const BoardPage({Key? key}) : super(key: key);
@@ -37,16 +39,31 @@ class _BoardPageState extends State<BoardPage> {
               [
                 SizedBox(
                   width: double.infinity,
-                  child: Column(
-                    children: [
-                      TotoUtils.buildPost(context),
-                      TotoUtils.buildPost(context),
-                      TotoUtils.buildPost(context),
-                      TotoUtils.buildPost(context),
-                      TotoUtils.buildPost(context),
-                      TotoUtils.buildPost(context),
-                    ],
-                  ),
+                  child: FutureBuilder<List<Post>>(
+                      future: getAllPostsByDate(),
+                      builder: (context, snapshot) {
+                        List<Widget> children = [];
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          case ConnectionState.done:
+                            if (snapshot.hasError) {
+                              return Text(snapshot.error.toString());
+                            } else {
+                              snapshot.data!.forEach((post) {
+                                children
+                                    .add(TotoUtils.buildPost(context, post));
+                              });
+                              return Column(
+                                children: children,
+                              );
+                            }
+                          default:
+                            return Text('Unhandle State');
+                        }
+                      }),
                 ),
               ],
             ),

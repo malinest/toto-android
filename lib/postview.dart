@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'api/post.dart';
 import 'utils.dart';
 
 class PostViewPage extends StatefulWidget {
-  const PostViewPage({Key? key}) : super(key: key);
+  final Post post;
+
+  const PostViewPage({Key? key, required this.post}) : super(key: key);
 
   @override
   State<PostViewPage> createState() => _PostViewPageState();
@@ -23,7 +25,7 @@ class _PostViewPageState extends State<PostViewPage> {
                     width: double.infinity,
                     child: Column(
                       children: [
-                        TotoUtils.buildPost(context),
+                        TotoUtils.buildPost(context, widget.post),
                         TotoUtils.buildPostComment(context),
                       ],
                     ),
