@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toto_android/board.dart';
+import 'package:toto_android/boardview.dart';
 import 'package:toto_android/colors.dart';
 import 'image.dart';
 import 'postview.dart';
