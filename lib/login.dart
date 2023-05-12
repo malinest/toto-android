@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toto_android/utils.dart';
+import 'package:toto_android/controller.dart';
 import 'colors.dart';
 import 'signup.dart';
 import 'textstyles.dart';
@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  TotoUtils.getHeader(context, 'Sign Up', const SignUpPage()),
+                  TotoController.getHeader(context, 'Sign Up', const SignUpPage()),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(50.0, 20.0, 0, 0),
                     child: Title(
@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-              TotoUtils.buildAccessButton(context, 'Continue', () => null),
+              TotoController.buildAccessButton(context, 'Continue', () => null),
             ],
           ),
         ));

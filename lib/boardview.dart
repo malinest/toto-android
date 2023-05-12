@@ -4,7 +4,7 @@ import 'colors.dart';
 import 'drawers.dart';
 import 'postform.dart';
 import 'textstyles.dart';
-import 'utils.dart';
+import 'controller.dart';
 import 'api/api.dart';
 
 class BoardPage extends StatefulWidget {
@@ -39,31 +39,7 @@ class _BoardPageState extends State<BoardPage> {
               [
                 SizedBox(
                   width: double.infinity,
-                  child: FutureBuilder<List<Post>>(
-                      future: getAllPostsByDate(),
-                      builder: (context, snapshot) {
-                        List<Widget> children = [];
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          case ConnectionState.done:
-                            if (snapshot.hasError) {
-                              return Text(snapshot.error.toString());
-                            } else {
-                              snapshot.data!.forEach((post) {
-                                children
-                                    .add(TotoUtils.buildPost(context, post));
-                              });
-                              return Column(
-                                children: children,
-                              );
-                            }
-                          default:
-                            return Text('Unhandle State');
-                        }
-                      }),
+                  child: TotoController.buildGeneralFeed(),
                 ),
               ],
             ),

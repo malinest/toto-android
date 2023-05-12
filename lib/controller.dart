@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:toto_android/boardview.dart';
 import 'package:toto_android/colors.dart';
+import 'api/api.dart';
 import 'api/post.dart';
 import 'image.dart';
 import 'postview.dart';
 import 'textstyles.dart';
 import 'package:flutter_svg/svg.dart';
 
-class TotoUtils {
+class TotoController {
   static Padding getHeader(
       BuildContext context, String destinationName, StatefulWidget sw) {
     return Padding(
@@ -65,8 +66,7 @@ class TotoUtils {
     );
   }
 
-  static
-  Card buildPost(BuildContext context, Post post) {
+  static Card buildPost(BuildContext context, Post post) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
@@ -76,10 +76,7 @@ class TotoUtils {
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PostViewPage(
-              post:
-                post
-            ),
+            builder: (context) => PostViewPage(post: post),
           ),
         ),
         child: Padding(
@@ -90,6 +87,7 @@ class TotoUtils {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    //Title of the post
                     Expanded(
                       child: Title(
                         color: TotoColors.textColor,
@@ -99,6 +97,7 @@ class TotoUtils {
                         ),
                       ),
                     ),
+                    //Title of the post
                     Title(
                       color: TotoColors.textColor,
                       child: Text(
@@ -111,11 +110,16 @@ class TotoUtils {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Title(
-                      color: TotoColors.textColor,
-                      child: Text(
-                        'No.${post.id} ${post.date} ${post.filename}',
-                        style: TotoTextStyles.labelSmall(context),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 3, 0),
+                        child: Title(
+                          color: TotoColors.textColor,
+                          child: Text(
+                            'No.${post.id} ${post.date} ${post.filename}',
+                            style: TotoTextStyles.labelSmall(context),
+                          ),
+                        ),
                       ),
                     ),
                     Title(
@@ -127,22 +131,7 @@ class TotoUtils {
                     ),
                   ],
                 ),
-                InkWell(
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Image(
-                        image: NetworkImage(
-                            'https://i.pinimg.com/originals/87/ae/83/87ae8360cfe56fda3b49e609eb3b7c25.jpg')),
-                  ),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ImagePage(
-                          url:
-                          'https://i.pinimg.com/originals/87/ae/83/87ae8360cfe56fda3b49e609eb3b7c25.jpg'),
-                    ),
-                  ),
-                ),
+                buildPostMedia(context, post),
                 SizedBox(
                   width: double.infinity,
                   child: Padding(
@@ -162,8 +151,33 @@ class TotoUtils {
       ),
     );
   }
-  static
-  Card buildPostComment(BuildContext context) {
+
+  static InkWell buildPostMedia(BuildContext context, Post post) {
+    if (post.filename != '') {
+      if (isFileVideo(post.filename)) {
+        return InkWell(child: Text('Video'),);
+      } else {
+        return InkWell(
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Image(
+                image: NetworkImage(
+                    'http://5.196.29.178:5000/static/images/${post.filename}')),
+          ),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ImagePage(
+                  url: 'http://5.196.29.178:5000/static/images/${post.filename}'),
+            ),
+          ),
+        );
+      }
+    }
+    return InkWell(child: Text('Nada'),);
+  }
+
+  static Card buildPostComment(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
@@ -224,7 +238,7 @@ class TotoUtils {
                   MaterialPageRoute(
                     builder: (context) => const ImagePage(
                         url:
-                        'https://pngimg.com/uploads/glass/wineglass_PNG2872.png'),
+                            'https://pngimg.com/uploads/glass/wineglass_PNG2872.png'),
                   ),
                 ),
               ),
@@ -238,5 +252,37 @@ class TotoUtils {
         ),
       ),
     );
+  }
+
+  static FutureBuilder<List<Post>> buildGeneralFeed() {
+    return FutureBuilder<List<Post>>(
+      future: getAllPostsByDate(),
+      builder: (context, snapshot) {
+        List<Widget> children = [];
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          case ConnectionState.done:
+            if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            } else {
+              snapshot.data!.forEach((post) {
+                children.add(TotoController.buildPost(context, post));
+              });
+              return Column(
+                children: children,
+              );
+            }
+          default:
+            return Text('Unhandle State');
+        }
+      },
+    );
+  }
+
+  static bool isFileVideo(String filename) {
+    return filename.endsWith('.mp4') || filename.endsWith('.mkv');
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'api/post.dart';
-import 'utils.dart';
+import 'controller.dart';
 
 class PostViewPage extends StatefulWidget {
   final Post post;
@@ -25,8 +25,8 @@ class _PostViewPageState extends State<PostViewPage> {
                     width: double.infinity,
                     child: Column(
                       children: [
-                        TotoUtils.buildPost(context, widget.post),
-                        TotoUtils.buildPostComment(context),
+                        TotoController.buildPost(context, widget.post),
+                        TotoController.buildPostComment(context),
                       ],
                     ),
                   ),

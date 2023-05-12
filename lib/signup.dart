@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toto_android/colors.dart';
 import 'package:toto_android/login.dart';
 import 'package:toto_android/textstyles.dart';
-import 'package:toto_android/utils.dart';
+import 'package:toto_android/controller.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -22,7 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TotoUtils.getHeader(context, 'Log in', const LoginPage()),
+                TotoController.getHeader(context, 'Log in', const LoginPage()),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(50.0, 0.0, 0, 0),
                   child: Title(
@@ -71,7 +71,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ],
             ),
-            TotoUtils.buildAccessButton(
+            TotoController.buildAccessButton(
                 context, 'Create an account', () => null),
           ],
         ),
