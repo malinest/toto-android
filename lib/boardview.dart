@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:toto_android/api/post.dart';
 import 'colors.dart';
 import 'drawers.dart';
 import 'postform.dart';
 import 'textstyles.dart';
 import 'controller.dart';
-import 'api/api.dart';
 
 class BoardPage extends StatefulWidget {
   const BoardPage({Key? key}) : super(key: key);
