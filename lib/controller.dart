@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toto_android/boardview.dart';
 import 'package:toto_android/colors.dart';
+import 'package:video_player/video_player.dart';
 import 'api/api.dart';
 import 'api/post.dart';
 import 'image.dart';
@@ -66,7 +67,7 @@ class TotoController {
     );
   }
 
-  static Card buildPost(BuildContext context, Post post) {
+  static Card buildPost(BuildContext context, Post post, VideoPlayerController? controller, Future<void>? initializeVideoPlayerFuture, Function? callback) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
@@ -97,7 +98,7 @@ class TotoController {
                         ),
                       ),
                     ),
-                    //Title of the post
+                    //Author of the post
                     Title(
                       color: TotoColors.textColor,
                       child: Text(
@@ -110,6 +111,7 @@ class TotoController {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    //Id, date and filename of the post
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 3, 0),
@@ -122,6 +124,7 @@ class TotoController {
                         ),
                       ),
                     ),
+                    //Number of comments
                     Title(
                       color: TotoColors.textColor,
                       child: Text(
@@ -131,11 +134,13 @@ class TotoController {
                     ),
                   ],
                 ),
-                buildPostMedia(context, post),
+                //File of the post
+                if (hasMedia(post)) buildPostMedia(context, post, controller, initializeVideoPlayerFuture, callback),
                 SizedBox(
                   width: double.infinity,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 5.0),
                     child: Text(
                       post.content,
                       maxLines: 4,
@@ -152,30 +157,51 @@ class TotoController {
     );
   }
 
-  static InkWell buildPostMedia(BuildContext context, Post post) {
-    if (post.filename != '') {
-      if (isFileVideo(post.filename)) {
-        return InkWell(child: Text('Video'),);
-      } else {
-        return InkWell(
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Image(
-                image: NetworkImage(
-                    'http://5.196.29.178:5000/static/images/${post.filename}')),
-          ),
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ImagePage(
-                  url: 'http://5.196.29.178:5000/static/images/${post.filename}'),
-            ),
-          ),
-        );
-      }
+  static Widget buildPostMedia(BuildContext context, Post post, VideoPlayerController? controller, Future<void>? initializeVideoPlayerFuture, Function? callback) {
+    if (isFileVideo(post.filename)) {
+      return Text('video');
+    } else {
+      return buildMediaImage(post, context);
     }
-    return InkWell(child: Text('Nada'),);
   }
+
+  static InkWell buildMediaImage(Post post, BuildContext context) {
+    return InkWell(
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Image(
+            image: NetworkImage(
+                'http://5.196.29.178:5000/static/images/${post.filename}')),
+      ),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ImagePage(
+              url: 'http://5.196.29.178:5000/static/images/${post.filename}'),
+        ),
+      ),
+    );
+  }
+/**
+  static Widget buildMediaVideo(Post post, BuildContext context, VideoPlayerController? controller, Future<void>? initializeVideoPlayerFuture, Function? callback) {
+
+    controller = VideoPlayerController.network('http://5.196.29.178:5000/static/videos/${post.filename}')
+      ..addListener(() => callback!(() {}))
+    ..initialize().then((_) => controller!.play());
+    return FutureBuilder(
+      future: initializeVideoPlayerFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return AspectRatio(aspectRatio: controller!.value.aspectRatio,child: VideoPlayer(controller!),);
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+    **/
 
   static Card buildPostComment(BuildContext context) {
     return Card(
@@ -254,22 +280,25 @@ class TotoController {
     );
   }
 
-  static FutureBuilder<List<Post>> buildGeneralFeed() {
+  static FutureBuilder<List<Post>> buildGeneralFeed(VideoPlayerController controller, Future<void> initializeVideoPlayerFuture, Function? callback) {
     return FutureBuilder<List<Post>>(
       future: getAllPostsByDate(),
       builder: (context, snapshot) {
         List<Widget> children = [];
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return const Center(
-              child: CircularProgressIndicator(),
+            return SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Center(
+                  child: CircularProgressIndicator(),
+              ),
             );
           case ConnectionState.done:
             if (snapshot.hasError) {
               return Text(snapshot.error.toString());
             } else {
               snapshot.data!.forEach((post) {
-                children.add(TotoController.buildPost(context, post));
+                children.add(TotoController.buildPost(context, post, controller, initializeVideoPlayerFuture, callback));
               });
               return Column(
                 children: children,
@@ -284,5 +313,9 @@ class TotoController {
 
   static bool isFileVideo(String filename) {
     return filename.endsWith('.mp4') || filename.endsWith('.mkv');
+  }
+
+  static bool hasMedia(Post post) {
+    return post.filename != '';
   }
 }

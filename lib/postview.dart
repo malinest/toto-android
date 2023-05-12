@@ -25,7 +25,7 @@ class _PostViewPageState extends State<PostViewPage> {
                     width: double.infinity,
                     child: Column(
                       children: [
-                        TotoController.buildPost(context, widget.post),
+                        TotoController.buildPost(context, widget.post, null, null, null),
                         TotoController.buildPostComment(context),
                       ],
                     ),

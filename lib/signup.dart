@@ -47,6 +47,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   padding: EdgeInsets.fromLTRB(50.0, 10.0, 50.0, 0),
                   child: TextField(
                     decoration: InputDecoration(
+                      labelText: 'Username',
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(50.0, 10.0, 50.0, 0),
+                  child: TextField(
+                    decoration: InputDecoration(
                       labelText: 'Email',
                     ),
                   ),

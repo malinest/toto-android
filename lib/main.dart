@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'signup.dart';
+import 'package:toto_android/boardview.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'NotoSans',
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const SignUpPage(),
+      home: const BoardPage(),
     );
   }
 }

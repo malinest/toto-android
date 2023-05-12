@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'colors.dart';
 import 'drawers.dart';
 import 'postform.dart';
@@ -13,6 +14,26 @@ class BoardPage extends StatefulWidget {
 }
 
 class _BoardPageState extends State<BoardPage> {
+  late VideoPlayerController _controller;
+  late Future<void> _initializeVideoPlayerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.network(
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+    );
+
+    _initializeVideoPlayerFuture = _controller.initialize();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +58,7 @@ class _BoardPageState extends State<BoardPage> {
               [
                 SizedBox(
                   width: double.infinity,
-                  child: TotoController.buildGeneralFeed(),
+                  child: TotoController.buildGeneralFeed(_controller, _initializeVideoPlayerFuture, super.setState),
                 ),
               ],
             ),
