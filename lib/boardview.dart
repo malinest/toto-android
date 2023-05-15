@@ -20,10 +20,7 @@ class _BoardPageState extends State<BoardPage> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-    );
-
+    _controller = VideoPlayerController.network('');
     _initializeVideoPlayerFuture = _controller.initialize();
   }
 
