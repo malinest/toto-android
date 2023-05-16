@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:toto_android/globals.dart';
 import 'board.dart';
@@ -26,6 +25,25 @@ Future<List<Post>> getAllPostsByDate() async {
   }
 }
 
+Future<List<Board>> getAllBoards() async {
+  print('getAllBoards');
+  List<Board> boards = [];
+
+  final uriBoard = Uri.http(Globals.API_URI, Globals.GET_BOARDS);
+  final responseBoard = await http.get(uriBoard);
+
+  List<dynamic> data = json.decode(responseBoard.body);
+
+  if (responseBoard.statusCode == 200) {
+    for (var board in data) {
+      boards.add(Board.fromJson(board));
+    }
+    return boards;
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
+
 Future<List<Post>> getPostsFromBoard(String collectionName) async {
   List<Post> posts = [];
 
@@ -42,6 +60,7 @@ Future<List<Post>> getPostsFromBoard(String collectionName) async {
     for (var post in data) {
       posts.add(Post.fromJson(post));
     }
+    posts.sort((a, b) => b.date.compareTo(a.date));
     return posts;
   } else {
     throw Exception('Failed to load data');

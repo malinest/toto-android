@@ -3,10 +3,12 @@ import 'package:toto_android/boardview.dart';
 import 'package:toto_android/colors.dart';
 import 'package:video_player/video_player.dart';
 import 'api/api.dart';
+import 'api/board.dart';
 import 'api/comment.dart';
 import 'api/post.dart';
 import 'globals.dart';
 import 'image.dart';
+import 'mainview.dart';
 import 'postview.dart';
 import 'textstyles.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,7 +29,7 @@ class TotoController {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BoardPage(),
+                builder: (context) => MainPage(),
               ),
             ),
           ),
@@ -48,6 +50,46 @@ class TotoController {
       ),
     );
   }
+
+
+  static Padding getBoardHeader(
+      Board board,
+      BuildContext context, String destinationName, StatefulWidget sw) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            child: const Icon(
+              Icons.keyboard_backspace_sharp,
+              color: TotoColors.primary,
+            ),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BoardPage(board: board),
+              ),
+            ),
+          ),
+          SvgPicture.asset('assets/logo.svg', height: 20),
+          InkWell(
+            child: Text(
+              destinationName,
+              style: TotoTextStyles.labelMedium(context),
+            ),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => sw,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   static Positioned buildAccessButton(
       BuildContext context, String text, Function function) {
@@ -229,10 +271,10 @@ class TotoController {
             children: [
               InkWell(
                 child: AspectRatio(
-                  aspectRatio: controller!.value.aspectRatio,
+                  aspectRatio: controller.value.aspectRatio,
                   child: VideoPlayer(controller),
                 ),
-                onTap: () => controller!.value.isPlaying
+                onTap: () => controller.value.isPlaying
                     ? controller.pause()
                     : controller.play(),
               ),
@@ -299,6 +341,42 @@ class TotoController {
       Function? callback) {
     return FutureBuilder<List<Post>>(
       future: getAllPostsByDate(),
+      builder: (context, snapshot) {
+        List<Widget> children = [];
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          case ConnectionState.done:
+            if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            } else {
+              for (var post in snapshot.data!) {
+                children.add(TotoController.buildPost(context, post, controller,
+                    initializeVideoPlayerFuture, callback));
+              }
+              return Column(
+                children: children,
+              );
+            }
+          default:
+            return const Text('Unhandled State');
+        }
+      },
+    );
+  }
+
+  static FutureBuilder<List<Post>> buildBoardFeed(
+      String collectionName,
+      VideoPlayerController controller,
+      Future<void> initializeVideoPlayerFuture,
+      Function? callback) {
+    return FutureBuilder<List<Post>>(
+      future: getPostsFromBoard(collectionName),
       builder: (context, snapshot) {
         List<Widget> children = [];
         switch (snapshot.connectionState) {

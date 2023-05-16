@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:toto_android/mainview.dart';
 import 'package:video_player/video_player.dart';
+import 'api/board.dart';
 import 'colors.dart';
 import 'drawers.dart';
 import 'postform.dart';
@@ -7,7 +10,9 @@ import 'textstyles.dart';
 import 'controller.dart';
 
 class BoardPage extends StatefulWidget {
-  const BoardPage({Key? key}) : super(key: key);
+  final Board board;
+
+  const BoardPage({Key? key, required this.board}) : super(key: key);
 
   @override
   State<BoardPage> createState() => _BoardPageState();
@@ -39,14 +44,24 @@ class _BoardPageState extends State<BoardPage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            systemOverlayStyle:
+                SystemUiOverlayStyle(statusBarColor: Colors.transparent),
             floating: true,
             backgroundColor: TotoColors.primary,
-            leading: const Icon(
-              Icons.keyboard_backspace,
-              color: TotoColors.contrastColor,
+            leading: InkWell(
+              child: const Icon(
+                Icons.keyboard_backspace,
+                color: TotoColors.contrastColor,
+              ),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainPage(),
+                ),
+              ),
             ),
             title: Text(
-              'Technology',
+              widget.board.name,
               style: TotoTextStyles.displayLarge(context),
             ),
           ),
@@ -55,7 +70,11 @@ class _BoardPageState extends State<BoardPage> {
               [
                 SizedBox(
                   width: double.infinity,
-                  child: TotoController.buildGeneralFeed(_controller, _initializeVideoPlayerFuture, super.setState),
+                  child: TotoController.buildBoardFeed(
+                      widget.board.collectionName,
+                      _controller,
+                      _initializeVideoPlayerFuture,
+                      super.setState),
                 ),
               ],
             ),
