@@ -24,7 +24,7 @@ class _PostFormPageState extends State<PostFormPage> {
                   children: [
                     buildFormHeader(context),
                     const TextField(
-                      maxLength: 50,
+                      maxLength: 100,
                       decoration: InputDecoration(hintText: 'Post title'),
                     ),
                     Expanded(
