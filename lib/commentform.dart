@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:toto_android/api/api.dart';
-import 'package:toto_android/boardview.dart';
 import 'package:toto_android/colors.dart';
 import 'package:toto_android/textstyles.dart';
 
@@ -11,7 +10,6 @@ import 'api/board.dart';
 
 class PostFormPage extends StatefulWidget {
   final Board board;
-
   const PostFormPage({Key? key, required this.board}) : super(key: key);
 
   @override
@@ -20,7 +18,6 @@ class PostFormPage extends StatefulWidget {
 
 class _PostFormPageState extends State<PostFormPage> {
   File file = File('');
-  String filename = '';
   final titleController = TextEditingController();
   final contentController = TextEditingController();
 
@@ -55,41 +52,6 @@ class _PostFormPageState extends State<PostFormPage> {
                   ],
                 ),
               ),
-              Visibility(
-                  visible: filename != '',
-                  child: Positioned(
-                    bottom: MediaQuery.of(context).viewInsets.bottom + 40,
-                    right: 0,
-                    left: 0,
-                    child: Card(
-                      color: TotoColors.primary,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                filename,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            InkWell(
-                                child: Icon(
-                                  Icons.close,
-                                  color: Colors.white,
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    file = File('');
-                                    filename = '';
-                                  });
-                                })
-                          ],
-                        ),
-                      ),
-                    ),
-                  )),
               Positioned(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
                 right: 0,
@@ -151,8 +113,7 @@ class _PostFormPageState extends State<PostFormPage> {
           child: Icon(Icons.close),
           onTap: () => Navigator.pop(context),
         ),
-        Text('/${widget.board.abbreviation}/ ${widget.board.name}',
-            style: TotoTextStyles.titleSmall(context)),
+        Text('/g/ Technology', style: TotoTextStyles.titleSmall(context)),
         InkWell(
           child: Card(
             shape:
@@ -168,14 +129,7 @@ class _PostFormPageState extends State<PostFormPage> {
             ),
           ),
           onTap: () {
-            Api.createPost(widget.board.collectionName, titleController.text,
-                'Anonymous', contentController.text, file);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BoardPage(board: widget.board),
-              ),
-            );
+            Api.createPost(widget.board.collectionName, titleController.text, 'Anonymous', contentController.text, file);
           },
         ),
       ],
@@ -187,11 +141,7 @@ class _PostFormPageState extends State<PostFormPage> {
 
     if (result != null) {
       File newfile = File(result.files.single.path!);
-      file = newfile;
-      setState(() {
-        filename = file.path.split('/').last;
-        print(filename);
-      });
+       file = newfile;
     } else {
       // User canceled the picker
     }

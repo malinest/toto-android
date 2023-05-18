@@ -206,15 +206,11 @@ class TotoController {
   }
 
   static Widget countComments(BuildContext context, post) {
-    int nComments = 0;
-    for (var comment in post.comments) {
-      nComments++;
-    }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          nComments.toString(),
+          post.comments.length.toString(),
           style: TotoTextStyles.labelMedium(context),
         ),
         Padding(
@@ -236,9 +232,17 @@ class TotoController {
       Future<void>? initializeVideoPlayerFuture,
       Function? callback) {
     if (isFileVideo(mediaUri)) {
-      controller = VideoPlayerController.network(
-          '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.API_VIDEOS}${mediaUri}');
-      initializeVideoPlayerFuture = controller.initialize();
+      if(mediaUri.contains('#')){
+        controller = VideoPlayerController.network(
+            '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals
+                .API_VIDEOS}$mediaUri');
+        initializeVideoPlayerFuture = controller.initialize();
+      }else {
+        controller = VideoPlayerController.network(
+            '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals
+                .API_VIDEOS}$mediaUri');
+        initializeVideoPlayerFuture = controller.initialize();
+      }
       return buildMediaVideo(initializeVideoPlayerFuture, controller);
     } else {
       return buildMediaImage(mediaUri, context);
@@ -340,7 +344,7 @@ class TotoController {
       Future<void> initializeVideoPlayerFuture,
       Function? callback) {
     return FutureBuilder<List<Post>>(
-      future: getAllPostsByDate(),
+      future: Api.getAllPostsByDate(),
       builder: (context, snapshot) {
         List<Widget> children = [];
         switch (snapshot.connectionState) {
@@ -376,7 +380,7 @@ class TotoController {
       Future<void> initializeVideoPlayerFuture,
       Function? callback) {
     return FutureBuilder<List<Post>>(
-      future: getPostsFromBoard(collectionName),
+      future: Api.getPostsFromBoard(collectionName),
       builder: (context, snapshot) {
         List<Widget> children = [];
         switch (snapshot.connectionState) {
@@ -475,8 +479,6 @@ class TotoController {
                       horizontal: 8.0, vertical: 5.0),
                   child: Text(
                     comment.content,
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                   ),
                 ),
@@ -561,8 +563,6 @@ class TotoController {
                       horizontal: 8.0, vertical: 5.0),
                   child: Text(
                     post.content,
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ImagePage extends StatefulWidget {
   final String url;
@@ -15,34 +16,32 @@ class _ImagePageState extends State<ImagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: InkWell(
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: InkWell(
-                  child: Icon(
-                    Icons.keyboard_backspace_sharp,
-                    color: Colors.white,
+      body: SafeArea(
+        child: InkWell(
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: InkWell(
+                    child: Icon(
+                      Icons.keyboard_backspace_sharp,
+                      color: Colors.white,
+                    ),
+                    onTap: () => Navigator.pop(context),
                   ),
-                  onTap: () => Navigator.pop(context),
                 ),
               ),
-            ),
-            Expanded(
-              child: Center(
-                child: Image.network(
-                  widget.url,
-                  fit: BoxFit.cover,
-                  height: double.infinity,
-                  width: double.infinity,
-                  alignment: Alignment.center,
+              Expanded(
+                child: PhotoView(
+                  imageProvider: NetworkImage(
+                    widget.url
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

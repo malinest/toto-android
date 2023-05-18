@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:toto_android/api/api.dart';
 import 'package:toto_android/boardview.dart';
 import 'package:toto_android/signup.dart';
 import 'package:toto_android/textstyles.dart';
 
+import 'api/api.dart';
 import 'api/board.dart';
 import 'login.dart';
 import 'mainview.dart';
@@ -47,7 +47,7 @@ class TotoDrawers {
     BuildContext context,
   ) =>
       FutureBuilder(
-          future: getAllBoards(),
+          future: Api.getAllBoards(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Text(snapshot.error.toString());

@@ -5,4 +5,6 @@ class Globals {
   static const String GET_BOARDS = '/api/get_boards';
   static const String API_IMAGES = '/static/images/';
   static const String API_VIDEOS = '/static/videos/';
+  static const String CREATE_POST = '/api/create_post';
+  static const String CREATE_COMMENT = '/api/create_comment';
 }

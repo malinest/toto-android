@@ -84,7 +84,7 @@ class _BoardPageState extends State<BoardPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PostFormPage()),
+          MaterialPageRoute(builder: (context) => PostFormPage(board: widget.board,)),
         ),
         backgroundColor: TotoColors.contrastColor,
         child: const Icon(
