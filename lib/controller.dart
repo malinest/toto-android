@@ -325,14 +325,14 @@ class TotoController {
       Post post,
       VideoPlayerController controller,
       Future<void> initializeVideoPlayerFuture,
-      Function? callback) {
+      Function? callback, Function(String newTitle) setResponseTo) {
     List<Widget> children = [
       buildMainPost(
-          context, post, controller, initializeVideoPlayerFuture, callback),
+          context, post, controller, initializeVideoPlayerFuture, callback, setResponseTo),
     ];
     for (var comment in post.comments) {
       children.add(TotoController.buildComment(
-          context, comment, controller, initializeVideoPlayerFuture, callback));
+          context, comment, controller, initializeVideoPlayerFuture, callback, setResponseTo));
     }
     return Column(
       children: children,
@@ -423,33 +423,121 @@ class TotoController {
   }
 
   static Widget buildComment(BuildContext context, Comment comment, controller,
-      initializeVideoPlayerFuture, callback) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //Author of the post
-                  Title(
-                    color: TotoColors.textColor,
+      initializeVideoPlayerFuture, callback, Function(String newResponseTo) setResponseTo) {
+    return InkWell(
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //Author of the post
+                    Title(
+                      color: TotoColors.textColor,
+                      child: Text(
+                        comment.username,
+                        style: TotoTextStyles.labelMedium(context),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      //Id, date and filename of the post
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 3, 0),
+                          child: Title(
+                            color: TotoColors.textColor,
+                            child: Text(
+                              'No.${comment.id} ${comment.date} ${comment.filename}',
+                              style: TotoTextStyles.labelSmall(context),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(children:[Text('>${comment.responseTo}',style: TotoTextStyles.bodyLarge(context),),],),
+                ),
+                //File of the post
+                if (hasMediaComment(comment))
+                  buildMedia(context, comment.filename, controller,
+                      initializeVideoPlayerFuture, callback),
+                SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 5.0),
                     child: Text(
-                      comment.username,
-                      style: TotoTextStyles.labelMedium(context),
+                      comment.content,
+                      textAlign: TextAlign.left,
                     ),
                   ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: Row(
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+      onTap: () => setResponseTo(comment.id.toString()),
+    );
+  }
+
+  static buildMainPost(
+      BuildContext context,
+      Post post,
+      VideoPlayerController controller,
+      Future<void> initializeVideoPlayerFuture,
+      Function? callback, Function(String newResponseTo) setResponseTo) {
+    return InkWell(
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //Title of the post
+                    Expanded(
+                      child: Title(
+                        color: TotoColors.textColor,
+                        child: Text(
+                          post.title,
+                          style: TotoTextStyles.displayMedium(context),
+                        ),
+                      ),
+                    ),
+                    //Author of the post
+                    Title(
+                      color: TotoColors.textColor,
+                      child: Text(
+                        post.username,
+                        style: TotoTextStyles.labelMedium(context),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     //Id, date and filename of the post
@@ -459,118 +547,44 @@ class TotoController {
                         child: Title(
                           color: TotoColors.textColor,
                           child: Text(
-                            'No.${comment.id} ${comment.date} ${comment.filename}',
+                            'No.${post.id} ${post.date} ${post.filename}',
                             style: TotoTextStyles.labelSmall(context),
                           ),
                         ),
                       ),
                     ),
+                    //Number of comments
+                    Title(
+                      color: TotoColors.textColor,
+                      child: countComments(context, post),
+                    ),
                   ],
                 ),
-              ),
-              //File of the post
-              if (hasMediaComment(comment))
-                buildMedia(context, comment.filename, controller,
-                    initializeVideoPlayerFuture, callback),
-              SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 5.0),
-                  child: Text(
-                    comment.content,
-                    textAlign: TextAlign.left,
+                //File of the post
+                if (hasMediaPost(post))
+                  buildMedia(context, post.filename, controller,
+                      initializeVideoPlayerFuture, callback),
+                SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 5.0),
+                    child: Text(
+                      post.content,
+                      textAlign: TextAlign.left,
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
+      onTap: () => setResponseTo(post.id.toString())
     );
   }
 
-  static buildMainPost(
-      BuildContext context,
-      Post post,
-      VideoPlayerController controller,
-      Future<void> initializeVideoPlayerFuture,
-      Function? callback) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //Title of the post
-                  Expanded(
-                    child: Title(
-                      color: TotoColors.textColor,
-                      child: Text(
-                        post.title,
-                        style: TotoTextStyles.displayMedium(context),
-                      ),
-                    ),
-                  ),
-                  //Author of the post
-                  Title(
-                    color: TotoColors.textColor,
-                    child: Text(
-                      post.username,
-                      style: TotoTextStyles.labelMedium(context),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //Id, date and filename of the post
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 3, 0),
-                      child: Title(
-                        color: TotoColors.textColor,
-                        child: Text(
-                          'No.${post.id} ${post.date} ${post.filename}',
-                          style: TotoTextStyles.labelSmall(context),
-                        ),
-                      ),
-                    ),
-                  ),
-                  //Number of comments
-                  Title(
-                    color: TotoColors.textColor,
-                    child: countComments(context, post),
-                  ),
-                ],
-              ),
-              //File of the post
-              if (hasMediaPost(post))
-                buildMedia(context, post.filename, controller,
-                    initializeVideoPlayerFuture, callback),
-              SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 5.0),
-                  child: Text(
-                    post.content,
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  static bool checkFileType(String filename) =>
+    Globals.MEDIA_TYPES.where((element) =>
+    filename.endsWith(element)).isNotEmpty;
 }

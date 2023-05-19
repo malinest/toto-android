@@ -10,6 +10,7 @@ class Post {
   bool is_pinned;
   String title;
   String username;
+  String? collectionName;
 
   Post(
       {required this.comments,

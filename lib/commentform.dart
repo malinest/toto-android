@@ -34,11 +34,6 @@ class _PostFormPageState extends State<PostFormPage> {
                 child: Column(
                   children: [
                     buildFormHeader(context),
-                    TextField(
-                      maxLength: 100,
-                      decoration: InputDecoration(hintText: 'Post title'),
-                      controller: titleController,
-                    ),
                     Expanded(
                       child: TextField(
                         maxLines: null,

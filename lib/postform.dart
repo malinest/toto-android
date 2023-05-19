@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:toto_android/api/api.dart';
@@ -42,16 +41,17 @@ class _PostFormPageState extends State<PostFormPage> {
                       decoration: InputDecoration(hintText: 'Post title'),
                       controller: titleController,
                     ),
-                    Expanded(
-                      child: TextField(
-                        maxLines: null,
-                        maxLength: 2400,
-                        decoration: InputDecoration(
-                          hintText: 'Post content',
+                    ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: 500),
+                        child: TextField(
+                          maxLines: null,
+                          maxLength: 2400,
+                          decoration: InputDecoration(
+                            hintText: 'Post content',
+                          ),
+                          controller: contentController,
                         ),
-                        controller: contentController,
                       ),
-                    )
                   ],
                 ),
               ),

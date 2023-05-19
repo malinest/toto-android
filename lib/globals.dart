@@ -7,4 +7,11 @@ class Globals {
   static const String API_VIDEOS = '/static/videos/';
   static const String CREATE_POST = '/api/create_post';
   static const String CREATE_COMMENT = '/api/create_comment';
+  static const List<String> MEDIA_TYPES = [
+    '.jpg',
+    '.jpeg',
+    '.png',
+    '.gif',
+    '.mp4'
+  ];
 }

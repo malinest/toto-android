@@ -21,7 +21,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network('');
+    _controller = VideoPlayerController.network('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
     _initializeVideoPlayerFuture = _controller.initialize();
   }
 
@@ -59,7 +59,7 @@ class _MainPageState extends State<MainPage> {
                     onTap: () => _key.currentState!.openDrawer(),
                   ),
                   SvgPicture.asset('assets/logo.svg', height: 20),
-                  Container(width: 15,)
+                  Container(width: 23,)
                 ],
               ),
             ),

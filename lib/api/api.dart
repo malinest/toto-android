@@ -59,7 +59,9 @@ class Api {
 
     if (response.statusCode == 200) {
       for (var post in data) {
-        posts.add(Post.fromJson(post));
+        Post newPost = Post.fromJson(post);
+        newPost.collectionName = collectionName;
+        posts.add(newPost);
       }
       posts.sort((a, b) => b.date.compareTo(a.date));
       return posts;
@@ -97,11 +99,12 @@ class Api {
     return response.statusCode == 302;
   }
 
-  static Future<bool> createComment(String collectionName, String response_to, String title, String username, String content, io.File file) async {
+  static Future<bool> createComment(int postId, String collectionName, String response_to, String username, String content, io.File file) async {
     final uri = Uri.parse('${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.CREATE_COMMENT}')
             .replace(queryParameters: {"board": collectionName});
 
     var request = http.MultipartRequest('POST', uri)
+      ..fields['id'] = postId.toString()
       ..fields['response_to'] = response_to
       ..fields['username'] = username
       ..fields['content'] = content;
@@ -120,7 +123,7 @@ class Api {
           filename: file.path.split('/').last
       ));
     } else {
-      request.files.add(http.MultipartFile.fromString('', ''));
+      request.files.add(http.MultipartFile.fromBytes('media', [], contentType: MediaType('image', ''),filename: ''));
     }
     var response = await request.send();
     return response.statusCode == 302;
