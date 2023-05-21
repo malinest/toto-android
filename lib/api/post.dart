@@ -7,7 +7,7 @@ class Post {
   DateTime date;
   String filename;
   int? id;
-  bool is_pinned;
+  bool isPinned;
   String title;
   String username;
   String? collectionName;
@@ -18,7 +18,7 @@ class Post {
       required this.date,
       required this.filename,
       required this.id,
-      required this.is_pinned,
+      required this.isPinned,
       required this.title,
       required this.username});
 
@@ -35,7 +35,7 @@ class Post {
         date: d.parse(json['date']),
         filename: json['filename'],
         id: json['id'],
-        is_pinned: json['is_pinned'],
+        isPinned: json['is_pinned'],
         title: json['title'],
         username: json['username']);
   }

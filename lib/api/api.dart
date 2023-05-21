@@ -99,7 +99,7 @@ class Api {
     return response.statusCode == 302;
   }
 
-  static Future<bool> createComment(int postId, String collectionName, String response_to, String username, String content, io.File file) async {
+  static Future<int> createComment(int postId, String collectionName, String response_to, String username, String content, io.File file) async {
     final uri = Uri.parse('${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.CREATE_COMMENT}')
             .replace(queryParameters: {"board": collectionName});
 
@@ -126,6 +126,29 @@ class Api {
       request.files.add(http.MultipartFile.fromBytes('media', [], contentType: MediaType('image', ''),filename: ''));
     }
     var response = await request.send();
-    return response.statusCode == 302;
+    return response.statusCode;
+  }
+
+  static Future<int> createUser(String username, String email, String password) async {
+    final uri = Uri.parse('${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.CREATE_USER}');
+
+    var request = http.MultipartRequest('POST', uri)
+      ..fields['password'] = password
+      ..fields['username'] = username
+      ..fields['email'] = email;
+    var response = await request.send();
+    print(await response.stream.bytesToString(utf8));
+    return response.statusCode;
+  }
+
+  static Future<int> logIn(String username, String password) async {
+    final uri = Uri.parse('${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.LOG_IN}');
+
+    var request = http.MultipartRequest('POST', uri)
+      ..fields['password'] = password
+      ..fields['username'] = username;
+    var response = await request.send();
+    print(await response.stream.bytesToString(utf8));
+    return response.statusCode;
   }
 }

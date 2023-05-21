@@ -5,6 +5,7 @@ import 'package:video_player/video_player.dart';
 import 'api/board.dart';
 import 'colors.dart';
 import 'drawers.dart';
+import 'globals.dart';
 import 'postform.dart';
 import 'textstyles.dart';
 import 'controller.dart';
@@ -40,7 +41,7 @@ class _BoardPageState extends State<BoardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      drawer: TotoDrawers.regularDrawer(context),
+      drawer: TotoDrawers.regularDrawer(context, Globals.username),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -81,14 +82,17 @@ class _BoardPageState extends State<BoardPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => PostFormPage(board: widget.board,)),
-        ),
-        backgroundColor: TotoColors.contrastColor,
-        child: const Icon(
-          Icons.create,
+      floatingActionButton: Visibility(
+        visible: Globals.isLogged,
+        child: FloatingActionButton(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PostFormPage(board: widget.board,)),
+          ),
+          backgroundColor: TotoColors.contrastColor,
+          child: const Icon(
+            Icons.create,
+          ),
         ),
       ),
     );

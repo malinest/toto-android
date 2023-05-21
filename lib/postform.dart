@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:toto_android/api/api.dart';
 import 'package:toto_android/boardview.dart';
 import 'package:toto_android/colors.dart';
+import 'package:toto_android/globals.dart';
 import 'package:toto_android/textstyles.dart';
 
 import 'api/board.dart';
@@ -169,7 +170,7 @@ class _PostFormPageState extends State<PostFormPage> {
           ),
           onTap: () {
             Api.createPost(widget.board.collectionName, titleController.text,
-                'Anonymous', contentController.text, file);
+                Globals.username, contentController.text, file);
             Navigator.push(
               context,
               MaterialPageRoute(

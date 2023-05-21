@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toto_android/boardview.dart';
+import 'package:toto_android/globals.dart';
 import 'package:toto_android/signup.dart';
 import 'package:toto_android/textstyles.dart';
 
@@ -9,17 +10,41 @@ import 'login.dart';
 import 'mainview.dart';
 
 class TotoDrawers {
-  static Drawer regularDrawer(BuildContext context) => Drawer(
-        width: 250,
+  static Drawer regularDrawer(BuildContext context, String username) => Drawer(
+        width: MediaQuery.of(context).size.width * .6,
         child: ListView(
-          padding: EdgeInsets.zero,
+          padding: EdgeInsets.symmetric(vertical: 100),
           children: [
-            drawerHeader(Icons.person, 'John Doe', context),
+            drawerHeader(Icons.person, username, context),
             listTile('Home', Icons.home, context, const MainPage()),
             listTile('Search', Icons.search, context, const SignUpPage()),
             getBoardTiles('Boards', Icons.burst_mode, context),
-            listTile('Settings', Icons.settings, context, const LoginPage()),
-            listTile('Log In', Icons.login, context, const LoginPage())
+            Visibility(
+              visible: !Globals.isLogged,
+              child: listTile(
+                'Log In',
+                Icons.login,
+                context,
+                const LoginPage(),
+              ),
+            ),
+            Visibility(
+              visible: !Globals.isLogged,
+              child: listTile(
+                'Sign up',
+                Icons.app_registration_rounded,
+                context,
+                const SignUpPage(),
+              ),
+            ),
+            Visibility(
+              visible: Globals.isLogged,
+              child: logOut(
+                'Log out',
+                Icons.logout,
+                context,
+              ),
+            ),
           ],
         ),
       );
@@ -31,6 +56,27 @@ class TotoDrawers {
         leading: Icon(icon),
         onTap: () => Navigator.push(
             context, MaterialPageRoute(builder: (context) => sw)),
+      );
+
+  static ListTile logOut(String title, IconData icon, BuildContext context) =>
+      ListTile(
+        title: Text(title),
+        leading: Icon(icon),
+        onTap: () {
+          Globals.username = '';
+          Globals.isLogged = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Container(
+                padding:
+                EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Text('Successfully logged out'),
+              ),
+            ),
+          );
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MainPage()));
+        }
       );
 
   static ListTile listBoardTile(
@@ -52,7 +98,7 @@ class TotoDrawers {
             if (snapshot.hasError) {
               return Text(snapshot.error.toString());
             } else {
-              if (snapshot.connectionState == ConnectionState.waiting){
+              if (snapshot.connectionState == ConnectionState.waiting) {
                 return SizedBox(
                   height: MediaQuery.of(context).size.height,
                   child: const Center(
@@ -76,20 +122,11 @@ class TotoDrawers {
   static DrawerHeader drawerHeader(
           IconData url, String name, BuildContext context) =>
       DrawerHeader(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(25.0),
-              child: CircleAvatar(
-                radius: 30,
-                child: Icon(url),
-              ),
-            ),
-            Text(
-              name,
-              style: TotoTextStyles.bodyLarge(context),
-            ),
-          ],
+        child: Center(
+          child: Text(
+            name,
+            style: TotoTextStyles.bodyLarge(context),
+          ),
         ),
       );
 }

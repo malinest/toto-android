@@ -7,6 +7,7 @@ import 'package:toto_android/colors.dart';
 import 'package:toto_android/textstyles.dart';
 
 import 'api/board.dart';
+import 'globals.dart';
 
 class PostFormPage extends StatefulWidget {
   final Board board;
@@ -124,7 +125,7 @@ class _PostFormPageState extends State<PostFormPage> {
             ),
           ),
           onTap: () {
-            Api.createPost(widget.board.collectionName, titleController.text, 'Anonymous', contentController.text, file);
+            Api.createPost(widget.board.collectionName, titleController.text, Globals.username, contentController.text, file);
           },
         ),
       ],

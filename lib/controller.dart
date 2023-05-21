@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:toto_android/boardview.dart';
 import 'package:toto_android/colors.dart';
@@ -51,10 +53,8 @@ class TotoController {
     );
   }
 
-
-  static Padding getBoardHeader(
-      Board board,
-      BuildContext context, String destinationName, StatefulWidget sw) {
+  static Padding getBoardHeader(Board board, BuildContext context,
+      String destinationName, StatefulWidget sw) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Row(
@@ -90,9 +90,14 @@ class TotoController {
     );
   }
 
-
-  static Positioned buildAccessButton(
-      BuildContext context, String text, Function function) {
+  static Positioned buildAccessButtonSignUp(
+    BuildContext context,
+    String text,
+    TextEditingController usernameController,
+    TextEditingController emailController,
+    TextEditingController passwordController,
+    TextEditingController confirmPasswordController,
+  ) {
     return Positioned(
       bottom: MediaQuery.of(context).viewInsets.bottom,
       left: 0,
@@ -100,7 +105,37 @@ class TotoController {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
         child: MaterialButton(
-          onPressed: () => null,
+          onPressed: () => signUp(
+            usernameController.text,
+            emailController.text,
+            passwordController.text,
+            confirmPasswordController.text,
+            context,
+          ),
+          color: TotoColors.primary,
+          child: Text(
+            text,
+            style: TotoTextStyles.labelLarge(context),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Positioned buildAccessButtonLogIn(
+      BuildContext context,
+      String text,
+      TextEditingController usernameController,
+      TextEditingController passwordController) {
+    return Positioned(
+      bottom: MediaQuery.of(context).viewInsets.bottom,
+      left: 0,
+      right: 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+        child: MaterialButton(
+          onPressed: () =>
+              logIn(usernameController.text, passwordController.text, context),
           color: TotoColors.primary,
           child: Text(
             text,
@@ -232,15 +267,13 @@ class TotoController {
       Future<void>? initializeVideoPlayerFuture,
       Function? callback) {
     if (isFileVideo(mediaUri)) {
-      if(mediaUri.contains('#')){
+      if (mediaUri.contains('#')) {
         controller = VideoPlayerController.network(
-            '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals
-                .API_VIDEOS}$mediaUri');
+            '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.API_VIDEOS}$mediaUri');
         initializeVideoPlayerFuture = controller.initialize();
-      }else {
+      } else {
         controller = VideoPlayerController.network(
-            '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals
-                .API_VIDEOS}$mediaUri');
+            '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.API_VIDEOS}$mediaUri');
         initializeVideoPlayerFuture = controller.initialize();
       }
       return buildMediaVideo(initializeVideoPlayerFuture, controller);
@@ -265,7 +298,9 @@ class TotoController {
     }
   }
 
-  static FutureBuilder<void> buildMediaVideo(Future<void> initializeVideoPlayerFuture, VideoPlayerController? controller) {
+  static FutureBuilder<void> buildMediaVideo(
+      Future<void> initializeVideoPlayerFuture,
+      VideoPlayerController? controller) {
     return FutureBuilder(
       future: initializeVideoPlayerFuture,
       builder: (context, snapshot) {
@@ -325,14 +360,15 @@ class TotoController {
       Post post,
       VideoPlayerController controller,
       Future<void> initializeVideoPlayerFuture,
-      Function? callback, Function(String newTitle) setResponseTo) {
+      Function? callback,
+      Function(String newTitle) setResponseTo) {
     List<Widget> children = [
-      buildMainPost(
-          context, post, controller, initializeVideoPlayerFuture, callback, setResponseTo),
+      buildMainPost(context, post, controller, initializeVideoPlayerFuture,
+          callback, setResponseTo),
     ];
     for (var comment in post.comments) {
-      children.add(TotoController.buildComment(
-          context, comment, controller, initializeVideoPlayerFuture, callback, setResponseTo));
+      children.add(TotoController.buildComment(context, comment, controller,
+          initializeVideoPlayerFuture, callback, setResponseTo));
     }
     return Column(
       children: children,
@@ -422,8 +458,13 @@ class TotoController {
     return comment.filename != '';
   }
 
-  static Widget buildComment(BuildContext context, Comment comment, controller,
-      initializeVideoPlayerFuture, callback, Function(String newResponseTo) setResponseTo) {
+  static Widget buildComment(
+      BuildContext context,
+      Comment comment,
+      controller,
+      initializeVideoPlayerFuture,
+      callback,
+      Function(String newResponseTo) setResponseTo) {
     return InkWell(
       child: Card(
         shape: RoundedRectangleBorder(
@@ -471,7 +512,14 @@ class TotoController {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(children:[Text('>${comment.responseTo}',style: TotoTextStyles.bodyLarge(context),),],),
+                  child: Row(
+                    children: [
+                      Text(
+                        '>${comment.responseTo}',
+                        style: TotoTextStyles.bodyLarge(context),
+                      ),
+                    ],
+                  ),
                 ),
                 //File of the post
                 if (hasMediaComment(comment))
@@ -502,89 +550,204 @@ class TotoController {
       Post post,
       VideoPlayerController controller,
       Future<void> initializeVideoPlayerFuture,
-      Function? callback, Function(String newResponseTo) setResponseTo) {
+      Function? callback,
+      Function(String newResponseTo) setResponseTo) {
     return InkWell(
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    //Title of the post
-                    Expanded(
-                      child: Title(
-                        color: TotoColors.textColor,
-                        child: Text(
-                          post.title,
-                          style: TotoTextStyles.displayMedium(context),
-                        ),
-                      ),
-                    ),
-                    //Author of the post
-                    Title(
-                      color: TotoColors.textColor,
-                      child: Text(
-                        post.username,
-                        style: TotoTextStyles.labelMedium(context),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    //Id, date and filename of the post
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 3, 0),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      //Title of the post
+                      Expanded(
                         child: Title(
                           color: TotoColors.textColor,
                           child: Text(
-                            'No.${post.id} ${post.date} ${post.filename}',
-                            style: TotoTextStyles.labelSmall(context),
+                            post.title,
+                            style: TotoTextStyles.displayMedium(context),
                           ),
                         ),
                       ),
-                    ),
-                    //Number of comments
-                    Title(
-                      color: TotoColors.textColor,
-                      child: countComments(context, post),
-                    ),
-                  ],
-                ),
-                //File of the post
-                if (hasMediaPost(post))
-                  buildMedia(context, post.filename, controller,
-                      initializeVideoPlayerFuture, callback),
-                SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 5.0),
-                    child: Text(
-                      post.content,
-                      textAlign: TextAlign.left,
-                    ),
+                      //Author of the post
+                      Title(
+                        color: TotoColors.textColor,
+                        child: Text(
+                          post.username,
+                          style: TotoTextStyles.labelMedium(context),
+                        ),
+                      ),
+                    ],
                   ),
-                )
-              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      //Id, date and filename of the post
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 3, 0),
+                          child: Title(
+                            color: TotoColors.textColor,
+                            child: Text(
+                              'No.${post.id} ${post.date} ${post.filename}',
+                              style: TotoTextStyles.labelSmall(context),
+                            ),
+                          ),
+                        ),
+                      ),
+                      //Number of comments
+                      Title(
+                        color: TotoColors.textColor,
+                        child: countComments(context, post),
+                      ),
+                    ],
+                  ),
+                  //File of the post
+                  if (hasMediaPost(post))
+                    buildMedia(context, post.filename, controller,
+                        initializeVideoPlayerFuture, callback),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 5.0),
+                      child: Text(
+                        post.content,
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
+        onTap: () => setResponseTo(post.id.toString()));
+  }
+
+  static bool checkFileType(String filename) => Globals.MEDIA_TYPES
+      .where((element) => filename.endsWith(element))
+      .isNotEmpty;
+
+  static Future<ScaffoldFeatureController<SnackBar, SnackBarClosedReason>>
+      signUp(String username, String email, String password,
+          String confirmPassword, BuildContext context) async {
+    String msg = 'Unknown error';
+    if (username.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      msg = "Please fill all fields.";
+    } else if (password != confirmPassword) {
+      msg = "Passwords doesn't match";
+    } else if (!checkEmail(email)) {
+      msg = "Email not valid";
+    } else if (password.length < 8) {
+      msg = "Password must be at least 8 characters long";
+    } else {
+      int response = await Api.createUser(username, email, password);
+      if (response == 400) {
+        msg = 'Username $username is already taken';
+      } else if (response == 302) {
+        msg = 'User created successfully';
+        Globals.username = username;
+        Globals.isLogged = true;
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => MainPage()));
+      }
+    }
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Text(msg),
+        ),
       ),
-      onTap: () => setResponseTo(post.id.toString())
     );
   }
 
-  static bool checkFileType(String filename) =>
-    Globals.MEDIA_TYPES.where((element) =>
-    filename.endsWith(element)).isNotEmpty;
+  static bool checkEmail(String email) {
+    return RegExp(
+            r"^[a-zA-Z0-9a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+  }
+
+  static Future<ScaffoldFeatureController<SnackBar, SnackBarClosedReason>>
+      logIn(
+    String username,
+    String password,
+    BuildContext context,
+  ) async {
+    String msg = '';
+    if (username.isEmpty || password.isEmpty) {
+      msg = "Please fill all fields.";
+    } else {
+      int response = await Api.logIn(username, password);
+      if (response == 401) {
+        msg = "Username and password doesn't exists";
+      } else if (response == 302) {
+        Globals.username = username;
+        Globals.isLogged = true;
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => MainPage()));
+      }
+    }
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Text(msg),
+        ),
+      ),
+    );
+  }
+
+  static void setComment(
+    Post post,
+    String responseTo,
+    String username,
+    String content,
+    File file,
+    BuildContext context,
+  ) async {
+    String msg = 'Unknown error';
+    int response = await Api.createComment(
+      post.id!,
+      post.collectionName!,
+      responseTo,
+      username,
+      content,
+      file,
+    );
+    switch (response) {
+      case 302:
+        msg = 'Comment published succesfully';
+        break;
+      case 404:
+        msg = 'There is no post that has or contains this id';
+        break;
+      case 415:
+        msg =
+            'Invalid file format, only this formats are accepted: ${Globals.MEDIA_TYPES.join(', ')}';
+        break;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Text(msg),
+        ),
+      ),
+    );
+  }
 }

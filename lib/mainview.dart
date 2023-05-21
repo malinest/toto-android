@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:toto_android/globals.dart';
 import 'package:video_player/video_player.dart';
 import 'colors.dart';
 import 'drawers.dart';
@@ -37,7 +38,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       key: _key,
       backgroundColor: Colors.grey[100],
-      drawer: TotoDrawers.regularDrawer(context),
+      drawer: TotoDrawers.regularDrawer(context, Globals.username),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(

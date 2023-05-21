@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toto_android/controller.dart';
 import 'colors.dart';
+import 'globals.dart';
 import 'signup.dart';
 import 'textstyles.dart';
 import 'drawers.dart';
@@ -13,78 +14,85 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: TotoDrawers.regularDrawer(context),
+        drawer: TotoDrawers.regularDrawer(context, Globals.username),
         resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TotoController.getHeader(context, 'Sign Up', const SignUpPage()),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(50.0, 20.0, 0, 0),
-                  child: Title(
-                    color: TotoColors.textColor,
-                    child: Text(
-                      'Log In',
-                      style: TotoTextStyles.titleMedium(context),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TotoController.getHeader(context, 'Sign Up', const SignUpPage()),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50.0, 20.0, 0, 0),
+                    child: Title(
+                      color: TotoColors.textColor,
+                      child: Text(
+                        'Log In',
+                        style: TotoTextStyles.titleMedium(context),
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(50.0, 10.0, 0, 0),
-                  child: Title(
-                    color: TotoColors.textColor,
-                    child: Text(
-                      'Hi there! Welcome back.',
-                      style: TotoTextStyles.bodyLarge(context),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50.0, 10.0, 0, 0),
+                    child: Title(
+                      color: TotoColors.textColor,
+                      child: Text(
+                        'Hi there! Welcome back.',
+                        style: TotoTextStyles.bodyLarge(context),
+                      ),
                     ),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Username',
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 0),
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        labelText: 'Username',
+                      ),
+                      controller: usernameController,
                     ),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Password',
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 0),
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        labelText: 'Password',
+                      ),
+                      obscureText: true,
+                      controller: passwordController,
                     ),
-                    obscureText: true,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(50.0, 15.0, 50.0, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        child: Text(
-                          'Forgot Password?',
-                          style: TotoTextStyles.displaySmall(context),
-                        ),
-                        onTap: () =>
-                            ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('To be implemented'),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50.0, 15.0, 50.0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          child: Text(
+                            'Forgot Password?',
+                            style: TotoTextStyles.displaySmall(context),
+                          ),
+                          onTap: () =>
+                              ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('To be implemented'),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-            TotoController.buildAccessButton(context, 'Continue', () => null),
-          ],
+                ],
+              ),
+              TotoController.buildAccessButtonLogIn(context, 'Continue', usernameController, passwordController),
+            ],
+          ),
         ));
   }
 }
