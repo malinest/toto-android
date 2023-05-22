@@ -12,10 +12,10 @@ class Globals {
   static bool isLogged = false;
   static String username = '';
   static const List<String> MEDIA_TYPES = [
-    '.jpg',
-    '.jpeg',
-    '.png',
-    '.gif',
-    '.mp4'
+    'jpg',
+    'jpeg',
+    'png',
+    'gif',
+    'mp4'
   ];
 }

@@ -29,6 +29,7 @@ class Post {
     for (var comment in data) {
       comments.add(Comment.fromJson(comment));
     }
+    if(json['filename'] != null) {
     return Post(
         comments: comments,
         content: json['content'],
@@ -37,6 +38,19 @@ class Post {
         id: json['id'],
         isPinned: json['is_pinned'],
         title: json['title'],
-        username: json['username']);
+        username: json['username'],
+    );
+    } else {
+      return Post(
+        comments: comments,
+        content: json['content'],
+        date: d.parse(json['date']),
+        filename: '',
+        id: json['id'],
+        isPinned: json['is_pinned'],
+        title: json['title'],
+        username: json['username'],
+      );
+    }
   }
 }

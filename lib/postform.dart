@@ -43,16 +43,16 @@ class _PostFormPageState extends State<PostFormPage> {
                       controller: titleController,
                     ),
                     ConstrainedBox(
-                        constraints: BoxConstraints(maxHeight: 500),
-                        child: TextField(
-                          maxLines: null,
-                          maxLength: 2400,
-                          decoration: InputDecoration(
-                            hintText: 'Post content',
-                          ),
-                          controller: contentController,
+                      constraints: BoxConstraints(maxHeight: 500),
+                      child: TextField(
+                        maxLines: null,
+                        maxLength: 2400,
+                        decoration: InputDecoration(
+                          hintText: 'Post content',
                         ),
+                        controller: contentController,
                       ),
+                    ),
                   ],
                 ),
               ),
@@ -114,21 +114,27 @@ class _PostFormPageState extends State<PostFormPage> {
                                 Icons.camera_alt,
                                 color: TotoColors.primary,
                               ),
-                              onTap: () => SearchFile(),
+                              onTap: () => SearchImage(),
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
-                            child: Icon(
-                              Icons.video_camera_back,
-                              color: TotoColors.primary,
+                            child: InkWell(
+                              child: Icon(
+                                Icons.video_camera_back,
+                                color: TotoColors.primary,
+                              ),
+                              onTap: () => SearchVideo(),
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
-                            child: Icon(
-                              Icons.gif_box,
-                              color: TotoColors.primary,
+                            child: InkWell(
+                              child: Icon(
+                                Icons.gif_box,
+                                color: TotoColors.primary,
+                              ),
+                              onTap: () => SearchGif(),
                             ),
                           ),
                         ],
@@ -183,8 +189,42 @@ class _PostFormPageState extends State<PostFormPage> {
     );
   }
 
-  SearchFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+  SearchImage() async {
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(allowMultiple: false, type: FileType.custom, allowedExtensions: ['png','jpg','jpeg']);
+
+    if (result != null) {
+      File newfile = File(result.files.single.path!);
+      file = newfile;
+      setState(() {
+        filename = file.path.split('/').last;
+        print(filename);
+      });
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  SearchVideo() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: false, type: FileType.custom, allowedExtensions: ['mp4']);
+
+    if (result != null) {
+      File newfile = File(result.files.single.path!);
+      file = newfile;
+      setState(() {
+        filename = file.path.split('/').last;
+        print(filename);
+      });
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  SearchGif() async {
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(allowMultiple: false, type: FileType.custom,
+        allowedExtensions: ['gif']);
 
     if (result != null) {
       File newfile = File(result.files.single.path!);

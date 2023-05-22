@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toto_android/boardview.dart';
+import 'package:toto_android/controller.dart';
 import 'package:toto_android/globals.dart';
 import 'package:toto_android/signup.dart';
 import 'package:toto_android/textstyles.dart';
@@ -63,8 +64,7 @@ class TotoDrawers {
         title: Text(title),
         leading: Icon(icon),
         onTap: () {
-          Globals.username = '';
-          Globals.isLogged = false;
+          TotoController.LoggedOut();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Container(

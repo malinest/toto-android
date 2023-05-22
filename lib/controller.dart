@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toto_android/boardview.dart';
 import 'package:toto_android/colors.dart';
 import 'package:video_player/video_player.dart';
@@ -415,8 +416,9 @@ class TotoController {
       VideoPlayerController controller,
       Future<void> initializeVideoPlayerFuture,
       Function? callback) {
+    Future<List<Post>> myData = Api.getPostsFromBoard(collectionName);
     return FutureBuilder<List<Post>>(
-      future: Api.getPostsFromBoard(collectionName),
+      future: myData,
       builder: (context, snapshot) {
         List<Widget> children = [];
         switch (snapshot.connectionState) {
@@ -436,8 +438,8 @@ class TotoController {
                     initializeVideoPlayerFuture, callback));
               }
               return Column(
-                children: children,
-              );
+                  children: children,
+                );
             }
           default:
             return const Text('Unhandled State');
@@ -636,7 +638,7 @@ class TotoController {
       .where((element) => filename.endsWith(element))
       .isNotEmpty;
 
-  static Future<ScaffoldFeatureController<SnackBar, SnackBarClosedReason>>
+  static Future<ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?>
       signUp(String username, String email, String password,
           String confirmPassword, BuildContext context) async {
     String msg = 'Unknown error';
@@ -656,13 +658,11 @@ class TotoController {
       if (response == 400) {
         msg = 'Username $username is already taken';
       } else if (response == 302) {
-        msg = 'User created successfully';
-        Globals.username = username;
-        Globals.isLogged = true;
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MainPage()));
+        msg = '';
+        LoggedIn(username, context);
       }
     }
+    if (msg != '')
     return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Container(
@@ -672,6 +672,7 @@ class TotoController {
         ),
       ),
     );
+    return null;
   }
 
   static bool checkEmail(String email) {
@@ -694,10 +695,7 @@ class TotoController {
       if (response == 401) {
         msg = "Username and password doesn't exists";
       } else if (response == 302) {
-        Globals.username = username;
-        Globals.isLogged = true;
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MainPage()));
+        await LoggedIn(username, context);
       }
     }
     return ScaffoldMessenger.of(context).showSnackBar(
@@ -709,6 +707,16 @@ class TotoController {
         ),
       ),
     );
+  }
+
+  static Future<void> LoggedIn(String username, BuildContext context) async {
+    Globals.username = username;
+    Globals.isLogged = true;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('loggedIn', true);
+    await prefs.setString('username', username);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MainPage()));
   }
 
   static void setComment(
@@ -749,5 +757,13 @@ class TotoController {
         ),
       ),
     );
+  }
+
+  static void LoggedOut() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Globals.username = '';
+    Globals.isLogged = false;
+    prefs.remove('loggedIn');
+    prefs.remove('username');
   }
 }

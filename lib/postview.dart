@@ -265,7 +265,7 @@ class _PostViewPageState extends State<PostViewPage> {
   }
 
   SearchFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.custom, allowedExtensions: Globals.MEDIA_TYPES);
 
     if (result != null) {
       File newfile = File(result.files.single.path!);
