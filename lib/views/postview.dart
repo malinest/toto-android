@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:toto_android/colors.dart';
-import 'package:toto_android/textstyles.dart';
-import 'api/post.dart';
-import 'controller.dart';
+import 'package:toto_android/model/colors.dart';
+import 'package:toto_android/model/textstyles.dart';
+import '../api/post.dart';
+import '../controller/controller.dart';
 import 'package:video_player/video_player.dart';
 
-import 'globals.dart';
+import '../model/globals.dart';
 
 class PostViewPage extends StatefulWidget {
   final Post post;

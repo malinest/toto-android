@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:toto_android/mainview.dart';
+import 'package:toto_android/views/mainview.dart';
 import 'package:video_player/video_player.dart';
-import 'api/board.dart';
-import 'colors.dart';
-import 'drawers.dart';
-import 'globals.dart';
+import '../api/board.dart';
+import '../model/colors.dart';
+import '../controller/drawers.dart';
+import '../model/globals.dart';
 import 'postform.dart';
-import 'textstyles.dart';
-import 'controller.dart';
+import '../model/textstyles.dart';
+import '../controller/controller.dart';
 
 class BoardPage extends StatefulWidget {
   final Board board;

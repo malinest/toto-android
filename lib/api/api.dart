@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io' as io;
 import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
-import 'package:toto_android/globals.dart';
+import 'package:toto_android/model/globals.dart';
 import 'board.dart';
 import 'post.dart';
 

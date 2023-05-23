@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:toto_android/boardview.dart';
-import 'package:toto_android/controller.dart';
-import 'package:toto_android/globals.dart';
-import 'package:toto_android/signup.dart';
-import 'package:toto_android/textstyles.dart';
+import 'package:toto_android/views/boardview.dart';
+import 'package:toto_android/controller/controller.dart';
+import 'package:toto_android/model/globals.dart';
+import 'package:toto_android/views/signup.dart';
+import 'package:toto_android/model/textstyles.dart';
 
-import 'api/api.dart';
-import 'api/board.dart';
-import 'login.dart';
-import 'mainview.dart';
+import '../api/api.dart';
+import '../api/board.dart';
+import '../views/login.dart';
+import '../views/mainview.dart';
 
 class TotoDrawers {
   static Drawer regularDrawer(BuildContext context, String username) => Drawer(

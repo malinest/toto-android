@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toto_android/colors.dart';
+import 'package:toto_android/model/colors.dart';
 
 class TotoTextStyles {
   static TextStyle? titleLarge(BuildContext context) =>

@@ -2,18 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toto_android/boardview.dart';
-import 'package:toto_android/colors.dart';
+import 'package:toto_android/views/boardview.dart';
+import 'package:toto_android/model/colors.dart';
 import 'package:video_player/video_player.dart';
-import 'api/api.dart';
-import 'api/board.dart';
-import 'api/comment.dart';
-import 'api/post.dart';
-import 'globals.dart';
-import 'image.dart';
-import 'mainview.dart';
-import 'postview.dart';
-import 'textstyles.dart';
+import '../api/api.dart';
+import '../api/board.dart';
+import '../api/comment.dart';
+import '../api/post.dart';
+import '../model/globals.dart';
+import '../model/textstyles.dart';
+import '../views/image.dart';
+import '../views/mainview.dart';
+import '../views/postview.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TotoController {
@@ -394,7 +394,19 @@ class TotoController {
             );
           case ConnectionState.done:
             if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
+              return SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Center(child: Column(
+                  children: [
+                    InkWell(child: Icon(Icons.update), onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MainPage(),
+                      ),
+                    ),),
+                  ],
+                )),
+              );
             } else {
               for (var post in snapshot.data!) {
                 children.add(TotoController.buildPost(context, post, controller,
@@ -405,7 +417,7 @@ class TotoController {
               );
             }
           default:
-            return const Text('Unhandled State');
+            return const Center(child: Text('Unhandled State'));
         }
       },
     );

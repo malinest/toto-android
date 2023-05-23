@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:toto_android/colors.dart';
-import 'package:toto_android/login.dart';
-import 'package:toto_android/textstyles.dart';
-import 'package:toto_android/controller.dart';
+import 'package:toto_android/model/colors.dart';
+import 'package:toto_android/views/login.dart';
+import 'package:toto_android/model/textstyles.dart';
+import 'package:toto_android/controller/controller.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});

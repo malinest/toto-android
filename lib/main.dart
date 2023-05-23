@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toto_android/globals.dart';
-import 'package:toto_android/mainview.dart';
+import 'package:toto_android/model/globals.dart';
+import 'package:toto_android/views/mainview.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

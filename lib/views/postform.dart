@@ -2,12 +2,12 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:toto_android/api/api.dart';
-import 'package:toto_android/boardview.dart';
-import 'package:toto_android/colors.dart';
-import 'package:toto_android/globals.dart';
-import 'package:toto_android/textstyles.dart';
+import 'package:toto_android/views/boardview.dart';
+import 'package:toto_android/model/colors.dart';
+import 'package:toto_android/model/globals.dart';
+import 'package:toto_android/model/textstyles.dart';
 
-import 'api/board.dart';
+import '../api/board.dart';
 
 class PostFormPage extends StatefulWidget {
   final Board board;

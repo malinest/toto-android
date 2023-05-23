@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:toto_android/controller.dart';
-import 'colors.dart';
-import 'globals.dart';
+import 'package:toto_android/controller/controller.dart';
+import '../model/colors.dart';
+import '../model/globals.dart';
 import 'signup.dart';
-import 'textstyles.dart';
-import 'drawers.dart';
+import '../model/textstyles.dart';
+import '../controller/drawers.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
