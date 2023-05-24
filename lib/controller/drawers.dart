@@ -18,7 +18,6 @@ class TotoDrawers {
           children: [
             drawerHeader(Icons.person, username, context),
             listTile('Home', Icons.home, context, const MainPage()),
-            listTile('Search', Icons.search, context, const SignUpPage()),
             getBoardTiles('Boards', Icons.burst_mode, context),
             Visibility(
               visible: !Globals.isLogged,

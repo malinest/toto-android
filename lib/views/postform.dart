@@ -175,14 +175,25 @@ class _PostFormPageState extends State<PostFormPage> {
             ),
           ),
           onTap: () {
-            Api.createPost(widget.board.collectionName, titleController.text,
-                Globals.username, contentController.text, file);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BoardPage(board: widget.board),
+            if (contentController.text.isNotEmpty) {
+              Api.createPost(widget.board.collectionName, titleController.text,
+                  Globals.username, contentController.text, file);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BoardPage(board: widget.board),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Container(
+                  padding:
+                  EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Text("The content can't be empty"),
+                ),
               ),
-            );
+            );}
           },
         ),
       ],
@@ -190,8 +201,10 @@ class _PostFormPageState extends State<PostFormPage> {
   }
 
   SearchImage() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(allowMultiple: false, type: FileType.custom, allowedExtensions: ['png','jpg','jpeg']);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['png', 'jpg', 'jpeg']);
 
     if (result != null) {
       File newfile = File(result.files.single.path!);
@@ -207,7 +220,9 @@ class _PostFormPageState extends State<PostFormPage> {
 
   SearchVideo() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: false, type: FileType.custom, allowedExtensions: ['mp4']);
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['mp4']);
 
     if (result != null) {
       File newfile = File(result.files.single.path!);
@@ -222,8 +237,9 @@ class _PostFormPageState extends State<PostFormPage> {
   }
 
   SearchGif() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(allowMultiple: false, type: FileType.custom,
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
         allowedExtensions: ['gif']);
 
     if (result != null) {

@@ -17,8 +17,8 @@ import '../views/postview.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TotoController {
-  static Padding getHeader(
-      BuildContext context, String destinationName, StatefulWidget sw) {
+  static Padding getHeader(BuildContext context, String destinationName,
+      StatefulWidget sw) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Row(
@@ -29,12 +29,13 @@ class TotoController {
               Icons.keyboard_backspace_sharp,
               color: TotoColors.primary,
             ),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MainPage(),
-              ),
-            ),
+            onTap: () =>
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MainPage(),
+                  ),
+                ),
           ),
           SvgPicture.asset('assets/logo.svg', height: 20),
           InkWell(
@@ -42,12 +43,13 @@ class TotoController {
               destinationName,
               style: TotoTextStyles.labelMedium(context),
             ),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => sw,
-              ),
-            ),
+            onTap: () =>
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => sw,
+                  ),
+                ),
           ),
         ],
       ),
@@ -66,12 +68,13 @@ class TotoController {
               Icons.keyboard_backspace_sharp,
               color: TotoColors.primary,
             ),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BoardPage(board: board),
-              ),
-            ),
+            onTap: () =>
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BoardPage(board: board),
+                  ),
+                ),
           ),
           SvgPicture.asset('assets/logo.svg', height: 20),
           InkWell(
@@ -79,40 +82,43 @@ class TotoController {
               destinationName,
               style: TotoTextStyles.labelMedium(context),
             ),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => sw,
-              ),
-            ),
+            onTap: () =>
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => sw,
+                  ),
+                ),
           ),
         ],
       ),
     );
   }
 
-  static Positioned buildAccessButtonSignUp(
-    BuildContext context,
-    String text,
-    TextEditingController usernameController,
-    TextEditingController emailController,
-    TextEditingController passwordController,
-    TextEditingController confirmPasswordController,
-  ) {
+  static Positioned buildAccessButtonSignUp(BuildContext context,
+      String text,
+      TextEditingController usernameController,
+      TextEditingController emailController,
+      TextEditingController passwordController,
+      TextEditingController confirmPasswordController,) {
     return Positioned(
-      bottom: MediaQuery.of(context).viewInsets.bottom,
+      bottom: MediaQuery
+          .of(context)
+          .viewInsets
+          .bottom,
       left: 0,
       right: 0,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
         child: MaterialButton(
-          onPressed: () => signUp(
-            usernameController.text,
-            emailController.text,
-            passwordController.text,
-            confirmPasswordController.text,
-            context,
-          ),
+          onPressed: () =>
+              signUp(
+                usernameController.text,
+                emailController.text,
+                passwordController.text,
+                confirmPasswordController.text,
+                context,
+              ),
           color: TotoColors.primary,
           child: Text(
             text,
@@ -123,13 +129,15 @@ class TotoController {
     );
   }
 
-  static Positioned buildAccessButtonLogIn(
-      BuildContext context,
+  static Positioned buildAccessButtonLogIn(BuildContext context,
       String text,
       TextEditingController usernameController,
       TextEditingController passwordController) {
     return Positioned(
-      bottom: MediaQuery.of(context).viewInsets.bottom,
+      bottom: MediaQuery
+          .of(context)
+          .viewInsets
+          .bottom,
       left: 0,
       right: 0,
       child: Padding(
@@ -147,8 +155,7 @@ class TotoController {
     );
   }
 
-  static Card buildPost(
-      BuildContext context,
+  static Card buildPost(BuildContext context,
       Post post,
       VideoPlayerController? controller,
       Future<void>? initializeVideoPlayerFuture,
@@ -159,12 +166,13 @@ class TotoController {
       ),
       margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
       child: InkWell(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PostViewPage(post: post),
-          ),
-        ),
+        onTap: () =>
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PostViewPage(post: post),
+              ),
+            ),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: SingleChildScrollView(
@@ -261,37 +269,31 @@ class TotoController {
     );
   }
 
-  static Widget buildMedia(
-      BuildContext context,
+  static Widget buildMedia(BuildContext context,
       String mediaUri,
       VideoPlayerController? controller,
       Future<void>? initializeVideoPlayerFuture,
       Function? callback) {
     if (isFileVideo(mediaUri)) {
-      if (mediaUri.contains('#')) {
-        controller = VideoPlayerController.network(
-            '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.API_VIDEOS}$mediaUri');
-        initializeVideoPlayerFuture = controller.initialize();
-      } else {
-        controller = VideoPlayerController.network(
-            '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.API_VIDEOS}$mediaUri');
-        initializeVideoPlayerFuture = controller.initialize();
-      }
+      controller = VideoPlayerController.network(
+          '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals
+              .API_VIDEOS}$mediaUri');
+      initializeVideoPlayerFuture = controller.initialize();
       return buildMediaVideo(initializeVideoPlayerFuture, controller);
     } else {
       return buildMediaImage(mediaUri, context);
     }
   }
 
-  static Widget buildCommentMedia(
-      BuildContext context,
+  static Widget buildCommentMedia(BuildContext context,
       Comment post,
       VideoPlayerController? controller,
       Future<void>? initializeVideoPlayerFuture,
       Function? callback) {
     if (isFileVideo(post.filename)) {
       controller = VideoPlayerController.network(
-          '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.API_VIDEOS}${post.filename}');
+          '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.API_VIDEOS}${post
+              .filename}');
       initializeVideoPlayerFuture = controller.initialize();
       return buildMediaVideo(initializeVideoPlayerFuture, controller);
     } else {
@@ -314,7 +316,8 @@ class TotoController {
                   aspectRatio: controller.value.aspectRatio,
                   child: VideoPlayer(controller),
                 ),
-                onTap: () => controller.value.isPlaying
+                onTap: () =>
+                controller.value.isPlaying
                     ? controller.pause()
                     : controller.play(),
               ),
@@ -341,23 +344,28 @@ class TotoController {
     return InkWell(
       child: Padding(
         padding: EdgeInsets.all(8.0),
-        child: Image(
-            image: NetworkImage(
-                '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.API_IMAGES}${mediaUri}')),
-      ),
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ImagePage(
-              url:
-                  '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals.API_IMAGES}${mediaUri}'),
+        child: FadeInImage.assetNetwork(
+          image:
+          '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals
+              .API_IMAGES}$mediaUri',
+          placeholder: 'assets/loading.gif',
         ),
       ),
+      onTap: () =>
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  ImagePage(
+                      url:
+                      '${Globals.API_PROTOCOL}${Globals.API_URI}${Globals
+                          .API_IMAGES}$mediaUri'),
+            ),
+          ),
     );
   }
 
-  static Widget buildPostComments(
-      BuildContext context,
+  static Widget buildPostComments(BuildContext context,
       Post post,
       VideoPlayerController controller,
       Future<void> initializeVideoPlayerFuture,
@@ -387,7 +395,10 @@ class TotoController {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return SizedBox(
-              height: MediaQuery.of(context).size.height,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height,
               child: const Center(
                 child: CircularProgressIndicator(),
               ),
@@ -395,17 +406,22 @@ class TotoController {
           case ConnectionState.done:
             if (snapshot.hasError) {
               return SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: Center(child: Column(
-                  children: [
-                    InkWell(child: Icon(Icons.update), onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainPage(),
-                      ),
-                    ),),
-                  ],
-                )),
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height,
+                child: Center(
+                  child: InkWell(
+                    child: const Icon(Icons.update, size: 36,),
+                    onTap: () =>
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MainPage(),
+                          ),
+                        ),
+                  ),
+                ),
               );
             } else {
               for (var post in snapshot.data!) {
@@ -423,8 +439,7 @@ class TotoController {
     );
   }
 
-  static FutureBuilder<List<Post>> buildBoardFeed(
-      String collectionName,
+  static FutureBuilder<List<Post>> buildBoardFeed(String collectionName,
       VideoPlayerController controller,
       Future<void> initializeVideoPlayerFuture,
       Function? callback) {
@@ -436,7 +451,10 @@ class TotoController {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return SizedBox(
-              height: MediaQuery.of(context).size.height,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height,
               child: const Center(
                 child: CircularProgressIndicator(),
               ),
@@ -450,8 +468,8 @@ class TotoController {
                     initializeVideoPlayerFuture, callback));
               }
               return Column(
-                  children: children,
-                );
+                children: children,
+              );
             }
           default:
             return const Text('Unhandled State');
@@ -472,8 +490,7 @@ class TotoController {
     return comment.filename != '';
   }
 
-  static Widget buildComment(
-      BuildContext context,
+  static Widget buildComment(BuildContext context,
       Comment comment,
       controller,
       initializeVideoPlayerFuture,
@@ -515,7 +532,8 @@ class TotoController {
                           child: Title(
                             color: TotoColors.textColor,
                             child: Text(
-                              'No.${comment.id} ${comment.date} ${comment.filename}',
+                              'No.${comment.id} ${comment.date} ${comment
+                                  .filename}',
                               style: TotoTextStyles.labelSmall(context),
                             ),
                           ),
@@ -559,8 +577,7 @@ class TotoController {
     );
   }
 
-  static buildMainPost(
-      BuildContext context,
+  static buildMainPost(BuildContext context,
       Post post,
       VideoPlayerController controller,
       Future<void> initializeVideoPlayerFuture,
@@ -646,13 +663,14 @@ class TotoController {
         onTap: () => setResponseTo(post.id.toString()));
   }
 
-  static bool checkFileType(String filename) => Globals.MEDIA_TYPES
-      .where((element) => filename.endsWith(element))
-      .isNotEmpty;
+  static bool checkFileType(String filename) =>
+      Globals.MEDIA_TYPES
+          .where((element) => filename.endsWith(element))
+          .isNotEmpty;
 
   static Future<ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?>
-      signUp(String username, String email, String password,
-          String confirmPassword, BuildContext context) async {
+  signUp(String username, String email, String password,
+      String confirmPassword, BuildContext context) async {
     String msg = 'Unknown error';
     if (username.isEmpty ||
         email.isEmpty ||
@@ -675,30 +693,31 @@ class TotoController {
       }
     }
     if (msg != '')
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Container(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Text(msg),
+      return ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Container(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery
+                    .of(context)
+                    .viewInsets
+                    .bottom),
+            child: Text(msg),
+          ),
         ),
-      ),
-    );
+      );
     return null;
   }
 
   static bool checkEmail(String email) {
     return RegExp(
-            r"^[a-zA-Z0-9a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        r"^[a-zA-Z0-9a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
   }
 
   static Future<ScaffoldFeatureController<SnackBar, SnackBarClosedReason>>
-      logIn(
-    String username,
-    String password,
-    BuildContext context,
-  ) async {
+  logIn(String username,
+      String password,
+      BuildContext context,) async {
     String msg = '';
     if (username.isEmpty || password.isEmpty) {
       msg = "Please fill all fields.";
@@ -714,7 +733,10 @@ class TotoController {
       SnackBar(
         content: Container(
           padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          EdgeInsets.only(bottom: MediaQuery
+              .of(context)
+              .viewInsets
+              .bottom),
           child: Text(msg),
         ),
       ),
@@ -731,14 +753,12 @@ class TotoController {
         context, MaterialPageRoute(builder: (context) => MainPage()));
   }
 
-  static void setComment(
-    Post post,
-    String responseTo,
-    String username,
-    String content,
-    File file,
-    BuildContext context,
-  ) async {
+  static void setComment(Post post,
+      String responseTo,
+      String username,
+      String content,
+      File file,
+      BuildContext context,) async {
     String msg = 'Unknown error';
     int response = await Api.createComment(
       post.id!,
@@ -757,14 +777,18 @@ class TotoController {
         break;
       case 415:
         msg =
-            'Invalid file format, only this formats are accepted: ${Globals.MEDIA_TYPES.join(', ')}';
+        'Invalid file format, only this formats are accepted: ${Globals
+            .MEDIA_TYPES.join(', ')}';
         break;
     }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Container(
           padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          EdgeInsets.only(bottom: MediaQuery
+              .of(context)
+              .viewInsets
+              .bottom),
           child: Text(msg),
         ),
       ),
