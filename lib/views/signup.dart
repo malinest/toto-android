@@ -88,8 +88,14 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ],
             ),
-            TotoController.buildAccessButtonSignUp(
-                context, 'Create an account', usernameController, emailController, passwordController, confirmPasswordController),
+            TotoController.buildAccessButton(
+                context,
+                'Create an account',
+                usernameController,
+                emailController,
+                passwordController,
+                confirmPasswordController,
+                true),
           ],
         ),
       ),

@@ -3,10 +3,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toto_android/model/globals.dart';
 import 'package:toto_android/views/mainview.dart';
 
-void main() async{
+/// Runs the application and checks if there is preferences stored in the device.
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  if((prefs.getBool('loggedIn') ?? false) && (prefs.getString('username')?? '').isNotEmpty){
+  if ((prefs.getBool('loggedIn') ?? false) &&
+      (prefs.getString('username') ?? '').isNotEmpty) {
     Globals.isLogged = true;
     Globals.username = prefs.getString('username')!;
   }

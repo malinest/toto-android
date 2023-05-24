@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toto_android/model/colors.dart';
 
+// TextStyles used in the App
 class TotoTextStyles {
   static TextStyle? titleLarge(BuildContext context) =>
       Theme.of(context).textTheme.titleLarge?.copyWith(

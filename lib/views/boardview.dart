@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:toto_android/views/mainview.dart';
 import 'package:video_player/video_player.dart';
-import '../api/board.dart';
-import '../model/colors.dart';
-import '../controller/drawers.dart';
-import '../model/globals.dart';
-import 'postform.dart';
-import '../model/textstyles.dart';
-import '../controller/controller.dart';
+import 'package:toto_android/model/colors.dart';
+import 'package:toto_android/model/globals.dart';
+import 'package:toto_android/model/textstyles.dart';
+import 'package:toto_android/views/mainview.dart';
+import 'package:toto_android/views/postform.dart';
+import 'package:toto_android/model/board.dart';
+import 'package:toto_android/controller/drawers.dart';
+import 'package:toto_android/controller/controller.dart';
 
 class BoardPage extends StatefulWidget {
   final Board board;
@@ -26,7 +26,7 @@ class _BoardPageState extends State<BoardPage> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
+    _controller = VideoPlayerController.network(Globals.videoPlayerPlaceHolder);
     _initializeVideoPlayerFuture = _controller.initialize();
   }
 
@@ -72,10 +72,7 @@ class _BoardPageState extends State<BoardPage> {
                 SizedBox(
                   width: double.infinity,
                   child: TotoController.buildBoardFeed(
-                      widget.board.collectionName,
-                      _controller,
-                      _initializeVideoPlayerFuture,
-                      super.setState),
+                      widget.board, _controller, _initializeVideoPlayerFuture),
                 ),
               ],
             ),
@@ -87,7 +84,10 @@ class _BoardPageState extends State<BoardPage> {
         child: FloatingActionButton(
           onPressed: () => Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PostFormPage(board: widget.board,)),
+            MaterialPageRoute(
+                builder: (context) => PostFormPage(
+                      board: widget.board,
+                    )),
           ),
           backgroundColor: TotoColors.contrastColor,
           child: const Icon(

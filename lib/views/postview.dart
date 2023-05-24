@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'package:toto_android/model/colors.dart';
 import 'package:toto_android/model/textstyles.dart';
-import '../api/post.dart';
-import '../controller/controller.dart';
-import 'package:video_player/video_player.dart';
+import 'package:toto_android/model/post.dart';
+import 'package:toto_android/controller/controller.dart';
 
 import '../model/globals.dart';
 
@@ -37,8 +37,8 @@ class _PostViewPageState extends State<PostViewPage> {
     if (widget.post.filename.endsWith('.mp4')) {
       _controller = VideoPlayerController.network(widget.post.filename);
     } else {
-      _controller = VideoPlayerController.network(
-          'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
+      _controller =
+          VideoPlayerController.network(Globals.videoPlayerPlaceHolder);
     }
 
     // Initialize the controller and store the Future for later use.
@@ -78,7 +78,6 @@ class _PostViewPageState extends State<PostViewPage> {
                                 widget.post,
                                 _controller,
                                 _initializeVideoPlayerFuture,
-                                super.setState,
                                 setResponseTo),
                           ],
                         ),
@@ -265,7 +264,10 @@ class _PostViewPageState extends State<PostViewPage> {
   }
 
   SearchFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.custom, allowedExtensions: Globals.MEDIA_TYPES);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: Globals.MEDIA_TYPES);
 
     if (result != null) {
       File newfile = File(result.files.single.path!);

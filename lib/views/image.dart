@@ -12,6 +12,7 @@ class ImagePage extends StatefulWidget {
 
 class _ImagePageState extends State<ImagePage> {
   bool isImageTapped = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,9 +36,7 @@ class _ImagePageState extends State<ImagePage> {
               ),
               Expanded(
                 child: PhotoView(
-                  imageProvider: NetworkImage(
-                    widget.url
-                  ),
+                  imageProvider: NetworkImage(widget.url),
                 ),
               ),
             ],

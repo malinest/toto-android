@@ -28,7 +28,8 @@ class _LoginPageState extends State<LoginPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  TotoController.getHeader(context, 'Sign Up', const SignUpPage()),
+                  TotoController.getHeader(
+                      context, 'Sign Up', const SignUpPage()),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(50.0, 20.0, 0, 0),
                     child: Title(
@@ -90,7 +91,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-              TotoController.buildAccessButtonLogIn(context, 'Continue', usernameController, passwordController),
+              TotoController.buildAccessButton(context, 'Continue',
+                  usernameController, null, passwordController, null, false),
             ],
           ),
         ));

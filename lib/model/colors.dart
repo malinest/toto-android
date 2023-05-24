@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+// Model of the main Palette of the app
 class TotoColors {
   static const primary = Color(0xffb3ab9e);
   static const secondary = Color(0xfffff3dd);

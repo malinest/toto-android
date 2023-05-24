@@ -1,15 +1,25 @@
 import 'package:intl/intl.dart';
 import 'comment.dart';
 
+/// Model of a Post
 class Post {
+  // Comments of the Post
   List<Comment> comments;
+  // Content  of the Post
   String content;
+  // Date of the Post posted
   DateTime date;
+  // Filename of the Post (not required)
   String filename;
+  // Id of the Post
   int? id;
+  // If the Post is Pinned on the Board
   bool isPinned;
+  // Title of the Post
   String title;
+  // Author of the Post
   String username;
+  // Name of the collection where the Post is stored
   String? collectionName;
 
   Post(
@@ -29,8 +39,8 @@ class Post {
     for (var comment in data) {
       comments.add(Comment.fromJson(comment));
     }
-    if(json['filename'] != null) {
-    return Post(
+    if (json['filename'] != null) {
+      return Post(
         comments: comments,
         content: json['content'],
         date: d.parse(json['date']),
@@ -39,7 +49,7 @@ class Post {
         isPinned: json['is_pinned'],
         title: json['title'],
         username: json['username'],
-    );
+      );
     } else {
       return Post(
         comments: comments,

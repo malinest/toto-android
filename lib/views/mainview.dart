@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:toto_android/model/globals.dart';
+import 'package:toto_android/model/sizes.dart';
 import 'package:video_player/video_player.dart';
 import '../model/colors.dart';
 import '../controller/drawers.dart';
@@ -19,24 +20,20 @@ class _MainPageState extends State<MainPage> {
   late Future<void> _initializeVideoPlayerFuture;
   final _key = GlobalKey<ScaffoldState>();
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
+  /// When the app closes, the video player controller closes as well
   @override
   void dispose() {
-    _controller.pause();
     _controller.dispose();
     super.dispose();
   }
 
+  /// Builds the Widget for the Main Page that calls [TotoController.buildGeneralFeed]
   @override
   Widget build(BuildContext context) {
-    _controller = VideoPlayerController.network('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
+    _controller = VideoPlayerController.network(Globals.videoPlayerPlaceHolder);
     _initializeVideoPlayerFuture = _controller.initialize();
 
-  return Scaffold(
+    return Scaffold(
       key: _key,
       backgroundColor: Colors.grey[100],
       drawer: TotoDrawers.regularDrawer(context, Globals.username),
@@ -49,7 +46,7 @@ class _MainPageState extends State<MainPage> {
             backgroundColor: TotoColors.primary,
             leadingWidth: double.infinity,
             leading: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              padding: EdgeInsets.symmetric(horizontal: Sizes.appBarPadding),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -60,8 +57,9 @@ class _MainPageState extends State<MainPage> {
                     ),
                     onTap: () => _key.currentState!.openDrawer(),
                   ),
-                  SvgPicture.asset('assets/logo.svg', height: 20),
-                  Container(width: 23,)
+                  SvgPicture.asset(Globals.logoSvgPath,
+                      height: Sizes.svgHeight),
+                  Container(width: Sizes.appBarPlaceHolderWidth)
                 ],
               ),
             ),
@@ -71,8 +69,8 @@ class _MainPageState extends State<MainPage> {
               [
                 SizedBox(
                   width: double.infinity,
-                  child: TotoController.buildGeneralFeed(_controller,
-                      _initializeVideoPlayerFuture, super.setState),
+                  child: TotoController.buildGeneralFeed(
+                      _controller, _initializeVideoPlayerFuture),
                 ),
               ],
             ),

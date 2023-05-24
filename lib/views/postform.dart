@@ -1,13 +1,12 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:toto_android/api/api.dart';
-import 'package:toto_android/views/boardview.dart';
 import 'package:toto_android/model/colors.dart';
 import 'package:toto_android/model/globals.dart';
 import 'package:toto_android/model/textstyles.dart';
-
-import '../api/board.dart';
+import 'package:toto_android/views/boardview.dart';
+import 'package:toto_android/controller/api.dart';
+import 'package:toto_android/model/board.dart';
 
 class PostFormPage extends StatefulWidget {
   final Board board;
@@ -186,14 +185,15 @@ class _PostFormPageState extends State<PostFormPage> {
               );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Container(
-                  padding:
-                  EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: Text("The content can't be empty"),
+                SnackBar(
+                  content: Container(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: Text("The content can't be empty"),
+                  ),
                 ),
-              ),
-            );}
+              );
+            }
           },
         ),
       ],
