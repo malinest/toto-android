@@ -37,6 +37,7 @@ class _BoardPageState extends State<BoardPage> {
     super.dispose();
   }
 
+  /// Builds the Board View Page Widget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +47,7 @@ class _BoardPageState extends State<BoardPage> {
         slivers: [
           SliverAppBar(
             systemOverlayStyle:
-                SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+                const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
             floating: true,
             backgroundColor: TotoColors.primary,
             leading: InkWell(
@@ -57,7 +58,7 @@ class _BoardPageState extends State<BoardPage> {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MainPage(),
+                  builder: (context) => const MainPage(),
                 ),
               ),
             ),

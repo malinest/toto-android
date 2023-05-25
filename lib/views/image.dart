@@ -13,6 +13,7 @@ class ImagePage extends StatefulWidget {
 class _ImagePageState extends State<ImagePage> {
   bool isImageTapped = false;
 
+  /// Builds the Image Page Widget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +27,7 @@ class _ImagePageState extends State<ImagePage> {
                 child: Padding(
                   padding: const EdgeInsets.all(15),
                   child: InkWell(
-                    child: Icon(
+                    child: const Icon(
                       Icons.keyboard_backspace_sharp,
                       color: Colors.white,
                     ),

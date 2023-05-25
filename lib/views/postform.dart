@@ -3,6 +3,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:toto_android/model/colors.dart';
 import 'package:toto_android/model/globals.dart';
+import 'package:toto_android/model/sizes.dart';
+import 'package:toto_android/model/strings.dart';
 import 'package:toto_android/model/textstyles.dart';
 import 'package:toto_android/views/boardview.dart';
 import 'package:toto_android/controller/api.dart';
@@ -29,25 +31,27 @@ class _PostFormPageState extends State<PostFormPage> {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(Sizes.postImagePadding),
           child: Stack(
             children: [
-              Expanded(
+              SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: [
                     buildFormHeader(context),
                     TextField(
                       maxLength: 100,
-                      decoration: InputDecoration(hintText: 'Post title'),
+                      decoration: const InputDecoration(hintText: 'Post title'),
                       controller: titleController,
                     ),
                     ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: 500),
+                      constraints: BoxConstraints(maxHeight: Sizes.postFormContentMaxHeight),
                       child: TextField(
                         maxLines: null,
-                        maxLength: 2400,
+                        maxLength: Globals.postFormContentMaxLength,
                         decoration: InputDecoration(
-                          hintText: 'Post content',
+                          hintText: Strings.postContent,
                         ),
                         controller: contentController,
                       ),
@@ -58,24 +62,24 @@ class _PostFormPageState extends State<PostFormPage> {
               Visibility(
                   visible: filename != '',
                   child: Positioned(
-                    bottom: MediaQuery.of(context).viewInsets.bottom + 40,
-                    right: 0,
-                    left: 0,
+                    bottom: MediaQuery.of(context).viewInsets.bottom + Sizes.postFormAttachmentNameHeight,
+                    right: Sizes.zero,
+                    left: Sizes.zero,
                     child: Card(
                       color: TotoColors.primary,
                       child: Padding(
-                        padding: const EdgeInsets.all(5),
+                        padding: EdgeInsets.all(Sizes.accessButtonPaddingVertical),
                         child: Row(
                           children: [
                             Expanded(
                               child: Text(
                                 filename,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white),
                               ),
                             ),
                             InkWell(
-                                child: Icon(
+                                child: const Icon(
                                   Icons.close,
                                   color: Colors.white,
                                 ),
@@ -92,13 +96,13 @@ class _PostFormPageState extends State<PostFormPage> {
                   )),
               Positioned(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
-                right: 0,
-                left: 0,
+                right: Sizes.zero,
+                left: Sizes.zero,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                         border: Border(
                             top: BorderSide(color: TotoColors.primary),
@@ -107,33 +111,45 @@ class _PostFormPageState extends State<PostFormPage> {
                       child: Row(
                         children: [
                           Padding(
-                            padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            padding: EdgeInsets.fromLTRB(
+                                Sizes.postFormIconMediaPadding,
+                                Sizes.postFormIconMediaPadding,
+                                Sizes.postFormIconMediaPadding,
+                                Sizes.zero),
                             child: InkWell(
-                              child: Icon(
+                              child: const Icon(
                                 Icons.camera_alt,
                                 color: TotoColors.primary,
                               ),
-                              onTap: () => SearchImage(),
+                              onTap: () => searchImage(),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            padding: EdgeInsets.fromLTRB(
+                                Sizes.postFormIconMediaPadding,
+                                Sizes.postFormIconMediaPadding,
+                                Sizes.postFormIconMediaPadding,
+                                Sizes.zero),
                             child: InkWell(
-                              child: Icon(
+                              child: const Icon(
                                 Icons.video_camera_back,
                                 color: TotoColors.primary,
                               ),
-                              onTap: () => SearchVideo(),
+                              onTap: () => searchVideo(),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            padding: EdgeInsets.fromLTRB(
+                                Sizes.postFormIconMediaPadding,
+                                Sizes.postFormIconMediaPadding,
+                                Sizes.postFormIconMediaPadding,
+                                Sizes.zero),
                             child: InkWell(
-                              child: Icon(
+                              child: const Icon(
                                 Icons.gif_box,
                                 color: TotoColors.primary,
                               ),
-                              onTap: () => SearchGif(),
+                              onTap: () => searchGif(),
                             ),
                           ),
                         ],
@@ -154,7 +170,7 @@ class _PostFormPageState extends State<PostFormPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         InkWell(
-          child: Icon(Icons.close),
+          child: const Icon(Icons.close),
           onTap: () => Navigator.pop(context),
         ),
         Text('/${widget.board.abbreviation}/ ${widget.board.name}',
@@ -162,13 +178,13 @@ class _PostFormPageState extends State<PostFormPage> {
         InkWell(
           child: Card(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.postButtonBorderRadius)),
             color: TotoColors.primary,
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 12.0),
+                  EdgeInsets.symmetric(vertical: Sizes.postButtonTextPaddingVertical, horizontal: Sizes.postButtonTextPaddingHorizontal),
               child: Text(
-                'Post',
+                Strings.post,
                 style: TotoTextStyles.labelLarge(context),
               ),
             ),
@@ -189,7 +205,7 @@ class _PostFormPageState extends State<PostFormPage> {
                   content: Container(
                     padding: EdgeInsets.only(
                         bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: Text("The content can't be empty"),
+                    child: Text(Strings.emptyContent),
                   ),
                 ),
               );
@@ -200,57 +216,51 @@ class _PostFormPageState extends State<PostFormPage> {
     );
   }
 
-  SearchImage() async {
+  /// Search for an Image in the File Explorer
+  searchImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowMultiple: false,
         type: FileType.custom,
         allowedExtensions: ['png', 'jpg', 'jpeg']);
 
     if (result != null) {
-      File newfile = File(result.files.single.path!);
-      file = newfile;
+      File newFile = File(result.files.single.path!);
+      file = newFile;
       setState(() {
         filename = file.path.split('/').last;
-        print(filename);
       });
-    } else {
-      // User canceled the picker
     }
   }
 
-  SearchVideo() async {
+  /// Search for a Video in the File Explorer
+  searchVideo() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowMultiple: false,
         type: FileType.custom,
         allowedExtensions: ['mp4']);
 
     if (result != null) {
-      File newfile = File(result.files.single.path!);
-      file = newfile;
+      File newFile = File(result.files.single.path!);
+      file = newFile;
       setState(() {
         filename = file.path.split('/').last;
-        print(filename);
       });
-    } else {
-      // User canceled the picker
     }
   }
 
-  SearchGif() async {
+  /// Search for a Gif in the File Explorer
+  searchGif() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowMultiple: false,
         type: FileType.custom,
         allowedExtensions: ['gif']);
 
     if (result != null) {
-      File newfile = File(result.files.single.path!);
-      file = newfile;
+      File newFile = File(result.files.single.path!);
+      file = newFile;
       setState(() {
         filename = file.path.split('/').last;
-        print(filename);
       });
-    } else {
-      // User canceled the picker
     }
   }
 }

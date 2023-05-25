@@ -4,6 +4,7 @@ import 'globals.dart';
 class Strings {
   static String home = 'Home';
   static String boards = 'Boards';
+  static String post = 'Post';
   static String login = 'Log In';
   static String signup = 'Sign up';
   static String logout = 'Log out';
@@ -24,4 +25,6 @@ class Strings {
   static String successSetComment = 'Comment published successfully';
   static String notFoundPostId = 'There is no post that has this id';
   static String unsupportedMediaPost = 'Invalid file format, only this formats are accepted: ';
+  static String emptyContent = "The content can't be empty";
+  static String postContent = 'Post content';
 }

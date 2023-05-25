@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 import 'dart:io' as io;
 import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +19,7 @@ class Api {
 
     List<dynamic> data = json.decode(responseBoard.body);
 
-    if (responseBoard.statusCode == HttpStatus.ok) {
+    if (responseBoard.statusCode == io.HttpStatus.ok) {
       for (var board in data) {
         boards.add(Board.fromJson(board));
         posts += await getPostsFromBoard(Board.fromJson(board).collectionName);
@@ -41,7 +40,7 @@ class Api {
 
     List<dynamic> data = json.decode(responseBoard.body);
 
-    if (responseBoard.statusCode == HttpStatus.ok) {
+    if (responseBoard.statusCode == io.HttpStatus.ok) {
       for (var board in data) {
         boards.add(Board.fromJson(board));
       }
@@ -63,7 +62,7 @@ class Api {
 
     List<dynamic> data = json.decode(response.body);
 
-    if (response.statusCode == HttpStatus.ok) {
+    if (response.statusCode == io.HttpStatus.ok) {
       for (var post in data) {
         Post newPost = Post.fromJson(post);
         newPost.collectionName = collectionName;
@@ -105,7 +104,7 @@ class Api {
           contentType: MediaType('image', ''), filename: ''));
     }
     var response = await request.send();
-    return response.statusCode == 302;
+    return response.statusCode == io.HttpStatus.found;
   }
 
   /// Sends a Comment creation request to the Api

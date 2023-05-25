@@ -31,9 +31,6 @@ class _PostViewPageState extends State<PostViewPage> {
   void initState() {
     super.initState();
 
-    // Create and store the VideoPlayerController. The VideoPlayerController
-    // offers several different constructors to play videos from assets, files,
-    // or the internet.
     if (widget.post.filename.endsWith('.mp4')) {
       _controller = VideoPlayerController.network(widget.post.filename);
     } else {
@@ -41,21 +38,19 @@ class _PostViewPageState extends State<PostViewPage> {
           VideoPlayerController.network(Globals.videoPlayerPlaceHolder);
     }
 
-    // Initialize the controller and store the Future for later use.
     _initializeVideoPlayerFuture = _controller.initialize();
 
-    // Use the controller to loop the video.
     _controller.setLooping(true);
   }
 
   @override
   void dispose() {
-    // Ensure disposing of the VideoPlayerController to free up resources.
     _controller.dispose();
 
     super.dispose();
   }
 
+  /// Builds the Post View Page Widget
   @override
   Widget build(BuildContext context) {
     bool? isAnonymous = false;
@@ -143,13 +138,13 @@ class _PostViewPageState extends State<PostViewPage> {
                             color: TotoColors.primary,
                           ),
                           child: Padding(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   filename,
-                                  style: TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                                 InkWell(
                                     child: const Icon(
@@ -188,7 +183,7 @@ class _PostViewPageState extends State<PostViewPage> {
                       ),
                     ),
                     ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: 200),
+                      constraints: const BoxConstraints(maxHeight: 200),
                       child: Row(
                         children: [
                           Expanded(
@@ -213,7 +208,7 @@ class _PostViewPageState extends State<PostViewPage> {
                                   Icons.attach_file,
                                   color: TotoColors.primary,
                                 ),
-                                onTap: () => SearchFile(),
+                                onTap: () => searchFile(),
                               ),
                             ),
                           ),
@@ -257,22 +252,24 @@ class _PostViewPageState extends State<PostViewPage> {
     );
   }
 
+  /// Changes the response_to value in the comment created
   setResponseTo(String newTitle) {
     setState(() {
       responseTo = newTitle;
     });
   }
 
-  SearchFile() async {
+  /// Search for an Image, Video or Gif in the File Explorer
+  searchFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowMultiple: false,
         type: FileType.custom,
         allowedExtensions: Globals.MEDIA_TYPES);
 
     if (result != null) {
-      File newfile = File(result.files.single.path!);
-      if (TotoController.checkFileType(newfile.path)) {
-        file = newfile;
+      File newFile = File(result.files.single.path!);
+      if (TotoController.checkFileType(newFile.path)) {
+        file = newFile;
         setState(() {
           filename = file.path.split('/').last;
         });

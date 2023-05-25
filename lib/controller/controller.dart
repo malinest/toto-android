@@ -36,7 +36,7 @@ class TotoController {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => MainPage(),
+                builder: (context) => const MainPage(),
               ),
             ),
           ),
@@ -286,6 +286,7 @@ class TotoController {
     }
   }
 
+  /// Renders the video given the filename, retrieving it from the server
   static FutureBuilder<void> buildMediaVideo(
       Future<void> initializeVideoPlayerFuture,
       VideoPlayerController? controller) {
@@ -324,7 +325,7 @@ class TotoController {
     );
   }
 
-  // Renders the image given the filename and retrieves it from the server
+  /// Renders the image given the filename, retrieving it from the server
   static InkWell buildMediaImage(String mediaUri, BuildContext context) {
     return InkWell(
       child: Padding(
@@ -346,7 +347,7 @@ class TotoController {
     );
   }
 
-  // Builds the comments of a Post, calling [TotoController.buildMainPost] and consequently their comments with [Toto.buildComment]
+  /// Builds the comments of a Post, calling [TotoController.buildMainPost] and consequently their comments with [Toto.buildComment]
   static Widget buildPostComments(
       BuildContext context,
       Post post,
@@ -366,12 +367,7 @@ class TotoController {
     );
   }
 
-  /// Calls [controller/Api.getAllPostsByDate]
-  ///
-  /// On a successful response builds every post of the server chronologicaly ascendant.
-  /// While loading it shows a CircularProgressIndicator.
-  /// On a failure response it displays an Icon that onTap tries again.
-
+  /// Calls [controller/Api.getAllPostsByDate] On a successful response builds every post of the server chronologically ascendant. While loading it shows a CircularProgressIndicator. On a failure response it displays an Icon that onTap tries again.
   static FutureBuilder<List<Post>> buildGeneralFeed(
       VideoPlayerController controller,
       Future<void> initializeVideoPlayerFuture) {
@@ -400,7 +396,7 @@ class TotoController {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MainPage(),
+                        builder: (context) => const MainPage(),
                       ),
                     ),
                   ),
@@ -422,11 +418,7 @@ class TotoController {
     );
   }
 
-  /// Calls [controller/Api.getPostsFromBoard]
-  ///
-  /// On a successful response builds every post of the asked Board.
-  /// While loading it shows a CircularProgressIndicator.
-  /// On a failure response it displays an Icon that onTap tries again.
+  /// Calls [controller/Api.getPostsFromBoard] On a successful response builds every post of the asked Board. While loading it shows a CircularProgressIndicator. On a failure response it displays an Icon that onTap tries again.
   static FutureBuilder<List<Post>> buildBoardFeed(
       Board board,
       VideoPlayerController controller,
@@ -684,7 +676,7 @@ class TotoController {
 
   /// Checks if the parameters are correct
   ///
-  /// On a successful try it calls [Api.createUser], calls [TotoController.LoggedIn] and returns
+  /// On a successful try it calls [Api.createUser], calls [TotoController.loggedIn] and returns
   /// a Snack bar notification.
   /// On a failure try it returns a Snack bar notification with the error.
   static Future<ScaffoldFeatureController<SnackBar, SnackBarClosedReason>>
@@ -708,7 +700,7 @@ class TotoController {
         msg = '${Strings.usernameMsg}$username${Strings.isAlreadyTakenMsg}';
       } else if (response == HttpStatus.found) {
         msg = Strings.userCreatedMsg;
-        LoggedIn(username, context);
+        loggedIn(username, context);
       }
     }
     return ScaffoldMessenger.of(context).showSnackBar(
@@ -732,7 +724,7 @@ class TotoController {
   /// Checks if the parameters are correct
   ///
   /// On a successful try it calls [Api.logIn] and waits for the response
-  /// to accept or deny the login, and calls [TotoController.LoggedIn].
+  /// to accept or deny the login, and calls [TotoController.loggedIn].
   /// On a failure try it returns a Snack bar notification with the error.
   static Future<ScaffoldFeatureController<SnackBar, SnackBarClosedReason>>
       logIn(
@@ -748,7 +740,7 @@ class TotoController {
       if (response == HttpStatus.unauthorized) {
         msg = Strings.failedLoginMsg;
       } else if (response == HttpStatus.found) {
-        await LoggedIn(username, context);
+        await loggedIn(username, context);
       }
     }
     return ScaffoldMessenger.of(context).showSnackBar(
@@ -763,14 +755,14 @@ class TotoController {
   }
 
   /// Writes in the device the username and sets true the loggedIn bool
-  static Future<void> LoggedIn(String username, BuildContext context) async {
+  static Future<void> loggedIn(String username, BuildContext context) async {
     Globals.username = username;
     Globals.isLogged = true;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('loggedIn', true);
     await prefs.setString('username', username);
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MainPage()));
+        context, MaterialPageRoute(builder: (context) => const MainPage()));
   }
 
   /// Calls [Api.createComment] and returns a Snack bar with the response.
@@ -816,7 +808,7 @@ class TotoController {
 
   /// Erases the data stored in the device and resets the variables of username
   /// and loggedIn
-  static void LoggedOut() async {
+  static void loggedOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Globals.username = '';
     Globals.isLogged = false;

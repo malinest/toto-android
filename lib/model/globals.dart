@@ -27,4 +27,5 @@ class Globals {
       'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4';
   static int postContentMaxLines = 4;
   static int passwordMinLenght = 8;
+  static int postFormContentMaxLength = 2400;
 }

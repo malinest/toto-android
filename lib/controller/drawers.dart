@@ -68,7 +68,7 @@ class TotoDrawers {
           title: Text(title),
           leading: Icon(icon),
           onTap: () {
-            TotoController.LoggedOut();
+            TotoController.loggedOut();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Container(
@@ -79,7 +79,7 @@ class TotoDrawers {
               ),
             );
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MainPage()));
+                context, MaterialPageRoute(builder: (context) => const MainPage()));
           });
 
   ///

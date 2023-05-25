@@ -20,4 +20,10 @@ class Sizes {
   static double commentIconHeight = 20.0;
   static double iconRetryConnectionSize = 36.0;
   static double commentResponseToPadding = 8.0;
+  static double postFormIconMediaPadding = 8.0;
+  static double postButtonBorderRadius = 20.0;
+  static double postButtonTextPaddingVertical = 5.0;
+  static double postButtonTextPaddingHorizontal = 12.0;
+  static double postFormContentMaxHeight = 500.0;
+  static double postFormAttachmentNameHeight = 40.0;
 }
