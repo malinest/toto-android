@@ -20,7 +20,7 @@ An open source Android App developed with Flutter to watch, post and comment you
 
 ## Installation
 
-Install the latest APK version: [Toto 1.0.1](https://github.com/malinest/toto-android/releases/download/1.0.0/Toto_1.0.1.apk)
+Install the latest APK version: [Toto 1.0.1](https://github.com/malinest/toto-android/releases/download/1.0.1/Toto_1.0.1.apk)
 	
 ## Screenshots
 
